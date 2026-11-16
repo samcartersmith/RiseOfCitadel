@@ -1,0 +1,15 @@
+{
+  "id": "kaykit-skeletons",
+  "name": "KayKit Character Pack: Skeletons 1.0",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_character_pack_skeletons/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0", "ref": "main" }],
+  "models": [
+    { "src": "addons/kaykit_character_pack_skeletons/Characters/gltf/Skeleton_Minion.glb", "out": "skeleton_minion" }
+  ],
+  "usedFor": "Hollow lane creeps and neutrals"
+}

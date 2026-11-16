@@ -208,7 +208,7 @@ Each brief has: concept, silhouette, palette, base assets to restyle, kit-bash p
 ---
 
 ## 4. Next art steps (after approval)
-1. Download the packs listed in §1.1 into `/assets-src/<pack>/` (roadmap M0-08). Each pack gets a `LICENSE` copy and a `CREDITS.md` entry. The asset pipeline converts them to compressed GLB/KTX2 in `apps/client/public/assets`.
+1. Download the packs listed in §1.1 into `/assets-src/<pack>/` (roadmap M0-08). Each pack gets a `LICENSE` copy and a `CREDITS.md` entry. The asset pipeline converts them to compressed GLB/KTX2 in `apps/client/public/models`.
 2. Build the shared toon shader + palette gradient-map as a Babylon.js shader that works on both WebGPU and WebGL2 (roadmap M1-02).
 3. Build Bulwark first (M1-11), as the proof that the restyle pipeline works.
 4. Do Kestrel, Cinderwright and Lantern in parallel (M2-16).

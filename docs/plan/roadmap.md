@@ -38,14 +38,14 @@ An original 5v5 MOBA in the genre that WC3 DotA defined. It's **browser-based (T
       /net          WebSocket client, interpolation, prediction
       /bridge       sim ↔ view sync (offline + online)
       /heroes/<id>  per-hero view config (anims, VFX mapping)
-    /public/assets  processed GLB/KTX2 (output of the asset pipeline)
+    /public/models  processed GLB (output of the asset pipeline)
     /tests          Playwright smoke + screenshot specs
   /server           Node authoritative server
 /packages
   /sim              @citadel/sim: pure game rules (no DOM)
   /protocol         @citadel/protocol: message types + binary codec
   /content          @citadel/content: JSON data + zod schemas + loader
-/assets-src         raw CC0 downloads (Git LFS) + LICENSE per pack + CREDITS.md
+/assets-src         per-pack manifest.json (source, license, models). Raw downloads are git-ignored and re-fetched with `pnpm assets:fetch`
 /tools              asset pipeline, content validator, map exporter, bot runner, perf report
 /docs               research, plan, design docs (one per hero)
 ```
@@ -70,14 +70,14 @@ Goal: a wired-up monorepo where the client builds and deploys to Vercel, the sim
 
 | ID | PR | Folders | Deps | Done when |
 |---|---|---|---|---|
-| M0-01 | Repo scaffold: pnpm workspace, TS strict base config, ESLint + Prettier, `.gitignore`, `.gitattributes` + Git LFS for `/assets-src`, README, CONTRIBUTING (PR rules, folder ownership), LICENSE | root, `/docs` | — | `pnpm install && pnpm typecheck` pass on an empty workspace. |
+| M0-01 | Repo scaffold: pnpm workspace, TS strict base config, ESLint + Prettier, `.gitignore`, `.gitattributes`, README, CONTRIBUTING (PR rules, folder ownership), LICENSE | root, `/docs` | — | `pnpm install && pnpm typecheck` pass on an empty workspace. |
 | M0-02 | Client app: Vite + Babylon, WebGPU-with-WebGL2-fallback engine bootstrap, empty scene, resize handling, `__citadelReady` + `__citadelStats` hooks | `apps/client` | 01 | `pnpm --filter client dev` shows a scene. `build` produces `dist/`. |
 | M0-03 | Packages: `sim` (tick loop stub + Vitest), `protocol` (codec stub), `content` (zod + loader stub) + sim purity lint rule | `packages/*` | 01 | `pnpm test` passes. The lint rule fails on a deliberate DOM import. |
 | M0-04 | Server app: Node + `ws` echo server, `pnpm dev:server`, a shared protocol handshake | `apps/server` | 03 | The client connects to `ws://localhost:7777` and gets an echo. |
 | M0-05 | CI: GitHub Actions for typecheck, lint, test, build, content validation, Playwright smoke + screenshot artifacts | `.github/`, `apps/client/tests` | 02, 03 | Every PR shows a green check with screenshots attached. |
 | M0-06 | Vercel: `vercel.json` (build command, output dir, long-cache headers for `/assets`, SPA fallback), preview deploys per PR | root config | 02 | A `main` push deploys. PRs get preview URLs. |
-| M0-07 | Asset pipeline v0: `tools/assets` script (glTF → meshopt + KTX2, writes into `public/assets`), a `CREDITS.md` generator from per-pack `LICENSE` files | `/tools/assets`, `/assets-src` | 01 | One sample CC0 model goes through the pipeline and loads in the client. |
-| M0-08 | Download the approved CC0 packs into `/assets-src/<pack>/` with licenses (**needs your OK, since it downloads files**) | `/assets-src` | 07 | `CREDITS.md` lists every pack with its source URL and license. |
+| M0-07 | Asset pipeline v0: `tools/assets` script (glTF → meshopt + KTX2, writes into `public/models`), a `CREDITS.md` generator from per-pack `LICENSE` files | `/tools/assets`, `/assets-src` | 01 | One sample CC0 model goes through the pipeline and loads in the client. |
+| M0-08 | Manifests for the approved CC0 packs + `pnpm assets:fetch` (downloads into git-ignored `raw/`, verifies each license) | `/assets-src` | 07 | `CREDITS.md` lists every pack with its source URL and license. |
 
 **Waves:** 01, then (02 ∥ 03 ∥ 07), then (04 ∥ 05 ∥ 06 ∥ 08).
 

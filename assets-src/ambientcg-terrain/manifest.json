@@ -1,0 +1,15 @@
+{
+  "id": "ambientcg-terrain",
+  "name": "ambientCG terrain textures (Grass004, Ground037, Ground054, Rock030)",
+  "author": "Lennart Demes (ambientCG)",
+  "source": "https://ambientcg.com",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://docs.ambientcg.com/license/",
+  "downloads": [
+    { "type": "zip", "url": "https://ambientcg.com/get?file=Grass004_1K-JPG.zip" },
+    { "type": "zip", "url": "https://ambientcg.com/get?file=Ground037_1K-JPG.zip" },
+    { "type": "zip", "url": "https://ambientcg.com/get?file=Ground054_1K-JPG.zip" },
+    { "type": "zip", "url": "https://ambientcg.com/get?file=Rock030_1K-JPG.zip" }
+  ],
+  "usedFor": "Terrain splat layers (grass, dirt, ash ground, rock), palette-remapped"
+}

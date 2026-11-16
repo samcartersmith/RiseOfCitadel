@@ -1,0 +1,17 @@
+{
+  "id": "kaykit-adventurers",
+  "name": "KayKit Character Pack: Adventurers 1.0",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_character_pack_adventures/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0", "ref": "main" }],
+  "models": [
+    { "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Knight.glb", "out": "knight" },
+    { "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Rogue_Hooded.glb", "out": "rogue_hooded" },
+    { "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Mage.glb", "out": "mage" }
+  ],
+  "usedFor": "Base bodies and weapons for Bulwark (Knight), Kestrel (Rogue), Cinderwright and Lantern (Mage)"
+}

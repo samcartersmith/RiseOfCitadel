@@ -28,7 +28,7 @@ export function readStats(engine: AbstractEngine, scene: Scene, backend: Backend
   return {
     backend,
     fps: Math.round(engine.getFps()),
-    drawCalls: inst.drawCallsCounter.lastSecAverage || inst.drawCallsCounter.current,
+    drawCalls: inst.drawCallsCounter.current,
     activeMeshes: scene.getActiveMeshes().length,
     activeIndices: scene.getActiveIndices(),
     totalVertices: scene.getTotalVertices(),

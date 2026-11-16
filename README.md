@@ -25,7 +25,7 @@ pnpm dev:all        # client on http://localhost:5173 + server on ws://localhost
 | `pnpm typecheck` / `pnpm lint` | Static checks                                                           |
 | `pnpm validate:content`        | Validate hero/item/map data                                             |
 | `pnpm assets:fetch`            | Download CC0 source packs into `assets-src/*/raw`                       |
-| `pnpm assets:build`            | Convert source packs into compressed GLB in `apps/client/public/assets` |
+| `pnpm assets:build`            | Convert source packs into compressed GLB in `apps/client/public/models` |
 
 URL flags for the client: `?engine=webgl` forces the WebGL2 fallback. `?server=ws://host:port` connects to a game server (dev builds connect to localhost automatically).
 

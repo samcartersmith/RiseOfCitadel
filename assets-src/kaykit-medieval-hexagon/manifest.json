@@ -1,0 +1,12 @@
+{
+  "id": "kaykit-medieval-hexagon",
+  "name": "KayKit Medieval Hexagon Pack 1.0",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_medieval_hexagon_pack/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0", "ref": "main" }],
+  "usedFor": "Towers, barracks, castle and nature pieces kit-bashed into structures and map props"
+}

@@ -14,7 +14,8 @@ test('boot scene renders within budget', async ({ page }, testInfo) => {
 
   const stats = await page.evaluate(() => window.__citadelStats!);
   expect(stats.backend).toBe('webgl2');
-  expect(stats.activeMeshes).toBeGreaterThan(0);
+  // 4 placeholder meshes + the Knight's meshes prove the asset pipeline output loads.
+  expect(stats.activeMeshes).toBeGreaterThan(6);
   expect(stats.drawCalls).toBeLessThanOrEqual(BUDGET.drawCalls);
   expect(stats.activeIndices / 3).toBeLessThanOrEqual(BUDGET.triangles);
   expect(errors).toEqual([]);
