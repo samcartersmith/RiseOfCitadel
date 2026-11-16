@@ -1,7 +1,9 @@
 /**
  * Convert the models listed in each pack manifest into web-ready GLBs:
- * dedup + keyframe resample + prune + weld + KHR_mesh_quantization (decoded natively by Babylon,
- * no extra decoder download). Output: apps/client/public/models/<pack>/<out>.glb
+ * optional per-model trimming (keepAnimations / keepNodes / removeNodes, see modelOptions.ts),
+ * then dedup + keyframe resample + prune + weld + KHR_mesh_quantization (decoded natively by
+ * Babylon, no extra decoder download; `quantize: false` opts out per model).
+ * Output: apps/client/public/models/<pack>/<out>.glb
  *
  * Texture compression (KTX2/Basis) and meshopt are added in M1 once budgets
  * show they're needed.
@@ -12,6 +14,7 @@ import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { dedup, prune, quantize, resample, weld } from '@gltf-transform/functions';
 import { loadManifests, MODELS_OUT, rawDir } from './manifest';
+import { optionTransforms } from './modelOptions';
 
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 let built = 0;
@@ -26,15 +29,26 @@ for (const m of loadManifests()) {
       continue;
     }
     const doc = await io.read(src);
-    await doc.transform(dedup(), resample(), prune(), weld(), quantize());
+    await doc.transform(
+      ...optionTransforms(model),
+      dedup(),
+      resample(),
+      prune(),
+      weld(),
+      ...(model.quantize === false ? [] : [quantize()]),
+    );
     const outDir = join(MODELS_OUT, m.id);
     mkdirSync(outDir, { recursive: true });
     const out = join(outDir, `${model.out}.glb`);
+    const previous = existsSync(out) ? statSync(out).size : null;
     await io.write(out, doc);
     built++;
     const kb = (n: number) => `${Math.round(n / 1024)} KB`;
+    const anims = doc.getRoot().listAnimations().length;
     console.log(
-      `built  ${m.id}/${model.out}.glb  ${kb(statSync(src).size)} -> ${kb(statSync(out).size)}`,
+      `built  ${m.id}/${model.out}.glb  src ${kb(statSync(src).size)}` +
+        (previous !== null ? `, was ${kb(previous)}` : '') +
+        ` -> ${kb(statSync(out).size)}  (${anims} animations)`,
     );
   }
 }

@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { ModelOptions } from './modelOptions';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const ASSETS_SRC = join(ROOT, 'assets-src');
@@ -11,7 +12,7 @@ export type Download =
   | { type: 'zip'; url: string }
   | { type: 'file'; url: string; filename: string };
 
-export interface ModelEntry {
+export interface ModelEntry extends ModelOptions {
   /** Path inside the extracted raw/ folder (a .glb or .gltf). */
   src: string;
   /** Output name, written to apps/client/public/models/<pack>/<out>.glb */
