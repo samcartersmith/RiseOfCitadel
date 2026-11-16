@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unit Sandbox · Rise of Citadel</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #1b1a1f;
+      }
+      #game {
+        width: 100%;
+        height: 100%;
+        display: block;
+        outline: none;
+        touch-action: none;
+      }
+      #overlay {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        font:
+          12px/1.4 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        color: #efe6d2;
+        background: rgb(0 0 0 / 0.55);
+        pointer-events: none;
+        user-select: none;
+      }
+      #overlay.hidden {
+        display: none;
+      }
+      #overlay .hud-body {
+        white-space: pre;
+      }
+      #overlay .over {
+        color: #e5484d;
+      }
+      #overlay .hud-tiers {
+        display: flex;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      #overlay .hud-tiers button {
+        pointer-events: auto;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        background: rgb(255 255 255 / 0.08);
+        border: 1px solid rgb(255 255 255 / 0.2);
+        border-radius: 3px;
+        padding: 1px 6px;
+      }
+      #overlay .hud-tiers button.active {
+        color: #1b1a1f;
+        background: #e8b54a;
+        border-color: #e8b54a;
+      }
+      #overlay .hud-hint,
+      #overlay .hud-tiers {
+        display: none;
+      }
+      #panel {
+        position: fixed;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        padding: 8px;
+        border-radius: 6px;
+        font:
+          12px/1.4 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        color: #efe6d2;
+        background: rgb(0 0 0 / 0.6);
+      }
+      #panel label {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      #panel button {
+        font: inherit;
+        color: inherit;
+        background: #2e2b33;
+        border: 1px solid #5e5a63;
+        border-radius: 4px;
+        padding: 3px 7px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="overlay">booting…</div>
+    <div id="panel"></div>
+    <script type="module" src="/src/sandbox/units.ts"></script>
+  </body>
+</html>

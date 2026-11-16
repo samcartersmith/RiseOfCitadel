@@ -28,6 +28,13 @@ export interface ModelViewConfig {
   clipSpeed?: Readonly<Partial<Record<LogicalState, number>>>;
   /** Default crossfade time in seconds. */
   blendTime?: number;
+  /**
+   * UnitView (M1-13): height above the feet, in world units at scale 1, where
+   * the HP bar is anchored (just over the head/hat). Multiplied by `scale`.
+   */
+  barAnchorHeight?: number;
+  /** UnitView: selection ring radius in world units at scale 1. Multiplied by `scale`. */
+  selectionRadius?: number;
 }
 
 /**
@@ -51,6 +58,8 @@ export const MODEL_CONFIGS: Readonly<Record<ModelId, ModelViewConfig>> = {
       show: ['1H_Sword', 'Rectangle_Shield', 'Knight_Helmet', 'Knight_Cape'],
       hide: ['Round_Shield', '2H_Sword'],
     },
+    barAnchorHeight: 2.5,
+    selectionRadius: 0.85,
     clips: {
       idle: 'Idle',
       run: 'Running_A',
@@ -74,6 +83,8 @@ export const MODEL_CONFIGS: Readonly<Record<ModelId, ModelViewConfig>> = {
       show: ['1H_Crossbow', 'Rogue_Cape'],
       hide: ['Knife', 'Knife_Offhand'],
     },
+    barAnchorHeight: 2.4,
+    selectionRadius: 0.8,
     clips: {
       idle: 'Idle',
       run: 'Running_A',
@@ -97,6 +108,8 @@ export const MODEL_CONFIGS: Readonly<Record<ModelId, ModelViewConfig>> = {
       show: ['2H_Staff', 'Mage_Hat', 'Mage_Cape'],
       hide: ['1H_Wand', 'Spellbook'],
     },
+    barAnchorHeight: 2.9,
+    selectionRadius: 0.8,
     clips: {
       idle: 'Idle',
       run: 'Running_A',
@@ -117,6 +130,8 @@ export const MODEL_CONFIGS: Readonly<Record<ModelId, ModelViewConfig>> = {
     url: '/models/kaykit-skeletons/skeleton_minion.glb',
     scale: 0.85,
     props: { show: [], hide: [] },
+    barAnchorHeight: 2.2,
+    selectionRadius: 0.75,
     clips: {
       idle: 'Idle',
       run: 'Running_A',
