@@ -81,9 +81,19 @@ test.describe('animation sandbox', () => {
   });
 
   test('crossfade blends weights and attack point fires once per attack', async ({ page }) => {
-    await page.evaluate(() => window.__citadelAnim!.setBlend(1));
+    // CI renders with software GL at a few fps, so a single frame can cover
+    // hundreds of ms. Use a long blend and wait for a mid-fade frame instead
+    // of sleeping a fixed wall-clock time.
+    await page.evaluate(() => window.__citadelAnim!.setBlend(5));
     await play(page, 'run');
-    await page.waitForTimeout(250);
+    await page.waitForFunction(
+      () => {
+        const w = window.__citadelAnim!.weights('knight');
+        return w.length === 2 && w[0]!.weight > 0 && w[0]!.weight < 1;
+      },
+      null,
+      { timeout: 10_000 },
+    );
     const mid = await page.evaluate(() => window.__citadelAnim!.weights('knight'));
     expect(mid.length).toBe(2); // run fading in, idle fading out
     const sum = mid.reduce((s, w) => s + w.weight, 0);
