@@ -6,6 +6,7 @@ export default defineConfig({
       'packages/*/test/**/*.test.ts',
       'apps/server/test/**/*.test.ts',
       'tools/**/*.test.ts',
+      'apps/client/src/**/*.test.ts',
     ],
   },
 });
