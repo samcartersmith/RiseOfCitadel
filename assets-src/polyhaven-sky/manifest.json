@@ -1,0 +1,16 @@
+{
+  "id": "polyhaven-sky",
+  "name": "Poly Haven HDRI: Kloofendal 48d Partly Cloudy (Pure Sky)",
+  "author": "Greg Zaal (Poly Haven)",
+  "source": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "downloads": [
+    {
+      "type": "file",
+      "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+      "filename": "kloofendal_48d_partly_cloudy_puresky_1k.hdr"
+    }
+  ],
+  "usedFor": "Image-based lighting and sky reference"
+}

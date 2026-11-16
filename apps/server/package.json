@@ -1,0 +1,19 @@
+{
+  "name": "@citadel/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.2"
+  },
+  "dependencies": {
+    "@citadel/protocol": "workspace:*",
+    "@citadel/sim": "workspace:*",
+    "ws": "^8.23.0"
+  }
+}

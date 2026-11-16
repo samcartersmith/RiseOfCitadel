@@ -1,0 +1,8 @@
+{
+  "id": "kestrel",
+  "name": "Kestrel",
+  "attribute": "agility",
+  "attackType": "ranged",
+  "faction": "wardens",
+  "roles": ["carry"]
+}

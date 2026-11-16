@@ -1,0 +1,12 @@
+{
+  "id": "kaykit-dungeon-remastered",
+  "name": "KayKit Dungeon Remastered 1.0",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_dungeon_remastered/Assets/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0", "ref": "main" }],
+  "usedFor": "Props, walls, braziers and kit-bash parts for structures and hero gear"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "lantern",
+  "name": "Lantern",
+  "attribute": "intelligence",
+  "attackType": "ranged",
+  "faction": "wardens",
+  "roles": ["support"]
+}

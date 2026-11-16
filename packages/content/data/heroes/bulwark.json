@@ -1,0 +1,8 @@
+{
+  "id": "bulwark",
+  "name": "Bulwark",
+  "attribute": "strength",
+  "attackType": "melee",
+  "faction": "wardens",
+  "roles": ["initiator", "durable"]
+}
