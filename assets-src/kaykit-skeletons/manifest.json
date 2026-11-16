@@ -9,7 +9,11 @@
   "licenseMustContain": "Creative Commons Zero",
   "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0", "ref": "main" }],
   "models": [
-    { "src": "addons/kaykit_character_pack_skeletons/Characters/gltf/Skeleton_Minion.glb", "out": "skeleton_minion" }
+    {
+      "src": "addons/kaykit_character_pack_skeletons/Characters/gltf/Skeleton_Minion.glb",
+      "out": "skeleton_minion",
+      "keepAnimations": ["Idle", "Running_A", "1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal", "Spellcast_Shoot", "Spellcast_Raise", "Spellcast_Summon", "Spellcasting", "Death_C_Skeletons", "Taunt", "Hit_B", "Walking_D_Skeletons", "Idle_Combat", "Spawn_Ground_Skeletons", "Death_A"]
+    }
   ],
   "usedFor": "Hollow lane creeps and neutrals"
 }

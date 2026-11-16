@@ -9,9 +9,24 @@
   "licenseMustContain": "Creative Commons Zero",
   "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0", "ref": "main" }],
   "models": [
-    { "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Knight.glb", "out": "knight" },
-    { "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Rogue_Hooded.glb", "out": "rogue_hooded" },
-    { "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Mage.glb", "out": "mage" }
+    {
+      "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Knight.glb",
+      "out": "knight",
+      "keepAnimations": ["Idle", "Running_A", "1H_Melee_Attack_Chop", "Block_Attack", "1H_Melee_Attack_Stab", "Spellcast_Raise", "2H_Melee_Attack_Chop", "Blocking", "Death_A", "Cheer", "Hit_A", "Walking_A", "Block", "Hit_B", "Death_B"],
+      "removeNodes": ["1H_Sword_Offhand", "Badge_Shield", "Spike_Shield"]
+    },
+    {
+      "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Rogue_Hooded.glb",
+      "out": "rogue_hooded",
+      "keepAnimations": ["Idle", "Running_A", "1H_Ranged_Shoot", "2H_Ranged_Shoot", "Dodge_Forward", "Spellcast_Shoot", "Throw", "1H_Ranged_Aiming", "Death_B", "Cheer", "Hit_B", "Walking_A", "1H_Ranged_Reload", "Hit_A", "Death_A"],
+      "removeNodes": ["2H_Crossbow", "Throwable"]
+    },
+    {
+      "src": "addons/kaykit_character_pack_adventures/Characters/gltf/Mage.glb",
+      "out": "mage",
+      "keepAnimations": ["Idle", "Running_A", "Spellcast_Shoot", "2H_Melee_Attack_Slice", "Spellcast_Long", "Spellcast_Raise", "2H_Melee_Attack_Chop", "Spellcasting", "Death_A", "Cheer", "Hit_A", "Walking_A", "2H_Melee_Idle", "Hit_B", "Death_B"],
+      "removeNodes": ["Spellbook_open"]
+    }
   ],
   "usedFor": "Base bodies and weapons for Bulwark (Knight), Kestrel (Rogue), Cinderwright and Lantern (Mage)"
 }
