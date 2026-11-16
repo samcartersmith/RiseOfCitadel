@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rise of Citadel</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #1b1a1f;
+      }
+      #game {
+        width: 100%;
+        height: 100%;
+        display: block;
+        outline: none;
+        touch-action: none;
+      }
+      #overlay {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        font:
+          12px/1.4 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        color: #efe6d2;
+        background: rgb(0 0 0 / 0.55);
+        pointer-events: none;
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="overlay">booting…</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

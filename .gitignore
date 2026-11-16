@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+coverage/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+.vercel/
+# Playwright
+apps/client/test-results/
+apps/client/playwright-report/
+# Raw CC0 downloads are fetched by `pnpm assets:fetch`; only manifests/licenses are committed
+assets-src/*/raw/

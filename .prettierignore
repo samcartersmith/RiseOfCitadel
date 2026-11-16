@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+dist
+apps/client/public/assets
+assets-src
+docs/research
+docs/plan
+docs/design

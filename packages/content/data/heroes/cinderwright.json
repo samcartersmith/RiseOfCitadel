@@ -1,0 +1,8 @@
+{
+  "id": "cinderwright",
+  "name": "Cinderwright",
+  "attribute": "intelligence",
+  "attackType": "ranged",
+  "faction": "hollow",
+  "roles": ["nuker"]
+}

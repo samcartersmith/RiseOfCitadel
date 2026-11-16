@@ -1,0 +1,34 @@
+{
+  "name": "rise-of-citadel",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @citadel/client dev",
+    "dev:server": "pnpm --filter @citadel/server dev",
+    "dev:all": "pnpm -r --parallel --filter @citadel/client --filter @citadel/server dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:e2e": "pnpm --filter @citadel/client test:e2e",
+    "validate:content": "pnpm --filter @citadel/content validate",
+    "assets:fetch": "tsx tools/assets/fetch.ts",
+    "assets:build": "tsx tools/assets/build.ts",
+    "assets:credits": "tsx tools/assets/credits.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.15.0",
+    "prettier": "^3.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^5.1.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@citadel/client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "typecheck": "tsc -p tsconfig.json",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "vite": "^8.3.8"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^9.36.0",
+    "@babylonjs/loaders": "^9.36.0",
+    "@citadel/protocol": "workspace:*",
+    "@citadel/sim": "workspace:*"
+  }
+}
