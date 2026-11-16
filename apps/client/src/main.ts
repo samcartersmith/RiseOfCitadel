@@ -8,12 +8,14 @@ import { registerShadowCaster, registerShadowReceiver } from './render/shadows';
 import type { QualityTier } from './render/quality';
 import { loadSampleHero } from './render/sampleHero';
 import { connect, type ConnectionStatus } from './net/connection';
+import { getMobaCamera, type MobaCamera } from './camera/mobaCamera';
 
 declare global {
   interface Window {
     __citadelReady?: boolean;
     __citadelStats?: CitadelStats;
     __citadelSetTier?: (tier: QualityTier) => void;
+    __citadelCamera?: MobaCamera;
   }
 }
 
@@ -22,6 +24,10 @@ const overlay = document.getElementById('overlay') as HTMLDivElement;
 
 const { engine, backend } = await createEngine(canvas);
 const scene = createBootScene(engine);
+// No heroes yet: Space recenters on the world origin. M2 passes the local hero here.
+const camera = getMobaCamera(scene);
+camera?.follow(() => ({ x: 0, z: 0 }), { lock: false });
+window.__citadelCamera = camera;
 await loadSampleHero(scene).catch((err) =>
   console.error('[citadel] sample hero failed to load', err),
 );

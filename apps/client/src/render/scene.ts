@@ -1,5 +1,4 @@
 import { Scene } from '@babylonjs/core/scene';
-import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
@@ -7,6 +6,7 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import type { AbstractEngine } from '@babylonjs/core/Engines/abstractEngine';
+import { createMobaCamera } from '../camera/mobaCamera';
 
 /** Palette from docs/design/art-direction.md §2.1. */
 export const Palette = {
@@ -33,11 +33,8 @@ export function createBootScene(engine: AbstractEngine): Scene {
   const scene = new Scene(engine);
   scene.clearColor = Color4.FromHexString('#1B1A1FFF');
 
-  // Fixed MOBA-style angle (~55° pitch). M1-03 builds the real camera.
-  const camera = new ArcRotateCamera('cam', -Math.PI / 2, 0.6, 60, Vector3.Zero(), scene);
-  camera.lowerRadiusLimit = 30;
-  camera.upperRadiusLimit = 90;
-  camera.attachControl(true);
+  // MOBA camera (M1-03): fixed yaw, ~55° pitch, edge/drag pan, zoom, bounds.
+  createMobaCamera(scene);
 
   new HemisphericLight('sky', new Vector3(0, 1, 0), scene).intensity = 0.6;
   const sun = new DirectionalLight('sun', new Vector3(-0.5, -1, 0.4), scene);
