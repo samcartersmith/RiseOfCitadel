@@ -33,7 +33,40 @@
         color: #efe6d2;
         background: rgb(0 0 0 / 0.55);
         pointer-events: none;
+        user-select: none;
+      }
+      #overlay.hidden {
+        display: none;
+      }
+      #overlay .hud-body {
         white-space: pre;
+      }
+      #overlay .over {
+        color: #e5484d;
+      }
+      #overlay .hud-tiers {
+        display: flex;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      #overlay .hud-tiers button {
+        pointer-events: auto;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        background: rgb(255 255 255 / 0.08);
+        border: 1px solid rgb(255 255 255 / 0.2);
+        border-radius: 3px;
+        padding: 1px 6px;
+      }
+      #overlay .hud-tiers button.active {
+        color: #1b1a1f;
+        background: #e8b54a;
+        border-color: #e8b54a;
+      }
+      #overlay .hud-hint {
+        margin-top: 4px;
+        opacity: 0.5;
       }
     </style>
   </head>
