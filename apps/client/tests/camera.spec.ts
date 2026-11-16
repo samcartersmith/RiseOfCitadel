@@ -13,6 +13,12 @@ test('MOBA camera: wheel zoom, edge pan, bounds', async ({ page }, testInfo) => 
   const viewport = page.viewportSize()!;
   const cx = viewport.width / 2;
   const cy = viewport.height / 2;
+  // Headless Chromium can report the pointer at (0,0), the top-left corner,
+  // which is inside the edge-pan margin. Park it in the centre and reset the
+  // focus so the test starts from a known state.
+  await page.mouse.move(cx, cy);
+  await page.evaluate(() => window.__citadelCamera!.focusOn({ x: 0, z: 0 }, { instant: true }));
+  await page.waitForTimeout(100);
   const start = await camState(page);
   expect(start.focus).toEqual({ x: 0, z: 0 });
   expect(start.pitchDeg).toBeGreaterThan(50);
