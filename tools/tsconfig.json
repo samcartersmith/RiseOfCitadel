@@ -1,5 +1,5 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": { "types": ["node"] },
-  "include": ["assets"]
+  "include": ["assets", "map"]
 }

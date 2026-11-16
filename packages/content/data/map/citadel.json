@@ -1,0 +1,1246 @@
+{
+  "id": "citadel",
+  "name": "Citadel",
+  "size": {
+    "width": 16000,
+    "depth": 16000
+  },
+  "heightLevels": {
+    "river": -64,
+    "low": 0,
+    "mid": 128,
+    "high": 256
+  },
+  "lanes": [
+    {
+      "id": "top",
+      "width": 750,
+      "waypoints": [
+        { "x": -6600, "z": -5000 },
+        { "x": -6800, "z": -3200 },
+        { "x": -7000, "z": -400 },
+        { "x": -6700, "z": 2600 },
+        { "x": -6900, "z": 4800 },
+        { "x": -6300, "z": 6300 },
+        { "x": -4600, "z": 6800 },
+        { "x": -2200, "z": 6600 },
+        { "x": 600, "z": 6900 },
+        { "x": 3200, "z": 6700 },
+        { "x": 5000, "z": 6600 }
+      ]
+    },
+    {
+      "id": "mid",
+      "width": 750,
+      "waypoints": [
+        { "x": -5200, "z": -5200 },
+        { "x": -2700, "z": -3100 },
+        { "x": -1200, "z": -1300 },
+        { "x": 0, "z": 0 },
+        { "x": 1200, "z": 1300 },
+        { "x": 2700, "z": 3100 },
+        { "x": 5200, "z": 5200 }
+      ]
+    },
+    {
+      "id": "bottom",
+      "width": 750,
+      "waypoints": [
+        { "x": -5000, "z": -6600 },
+        { "x": -3200, "z": -6700 },
+        { "x": -600, "z": -6900 },
+        { "x": 2200, "z": -6600 },
+        { "x": 4600, "z": -6800 },
+        { "x": 6300, "z": -6300 },
+        { "x": 6900, "z": -4800 },
+        { "x": 6700, "z": -2600 },
+        { "x": 7000, "z": 400 },
+        { "x": 6800, "z": 3200 },
+        { "x": 6600, "z": 5000 }
+      ]
+    }
+  ],
+  "river": {
+    "waypoints": [
+      { "x": -8000, "z": 4400 },
+      { "x": -6000, "z": 3700 },
+      { "x": -4200, "z": 2300 },
+      { "x": -2400, "z": 1300 },
+      { "x": -1000, "z": 400 },
+      { "x": 0, "z": 0 },
+      { "x": 1000, "z": -400 },
+      { "x": 2400, "z": -1300 },
+      { "x": 4200, "z": -2300 },
+      { "x": 6000, "z": -3700 },
+      { "x": 8000, "z": -4400 }
+    ],
+    "width": 900
+  },
+  "regions": [
+    {
+      "id": "border_south",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "neutral",
+      "polygon": [
+        { "x": -8000, "z": -8000 },
+        { "x": 8000, "z": -8000 },
+        { "x": 8000, "z": -7700 },
+        { "x": -8000, "z": -7700 }
+      ]
+    },
+    {
+      "id": "border_north",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "neutral",
+      "polygon": [
+        { "x": 8000, "z": 8000 },
+        { "x": -8000, "z": 8000 },
+        { "x": -8000, "z": 7700 },
+        { "x": 8000, "z": 7700 }
+      ]
+    },
+    {
+      "id": "border_west",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "neutral",
+      "polygon": [
+        { "x": -8000, "z": -7700 },
+        { "x": -7700, "z": -7700 },
+        { "x": -7700, "z": 7700 },
+        { "x": -8000, "z": 7700 }
+      ]
+    },
+    {
+      "id": "border_east",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "neutral",
+      "polygon": [
+        { "x": 8000, "z": 7700 },
+        { "x": 7700, "z": 7700 },
+        { "x": 7700, "z": -7700 },
+        { "x": 8000, "z": -7700 }
+      ]
+    },
+    {
+      "id": "river",
+      "tag": "river",
+      "height": "river",
+      "faction": "neutral",
+      "polygon": [
+        { "x": -7851, "z": 4825 },
+        { "x": -5782, "z": 4100 },
+        { "x": -3951, "z": 2677 },
+        { "x": -2169, "z": 1686 },
+        { "x": -793, "z": 802 },
+        { "x": 167, "z": 418 },
+        { "x": 1207, "z": 2 },
+        { "x": 2631, "z": -914 },
+        { "x": 4449, "z": -1923 },
+        { "x": 6218, "z": -3300 },
+        { "x": 8000, "z": -3975 },
+        { "x": 7851, "z": -4825 },
+        { "x": 5782, "z": -4100 },
+        { "x": 3951, "z": -2677 },
+        { "x": 2169, "z": -1686 },
+        { "x": 793, "z": -802 },
+        { "x": -167, "z": -418 },
+        { "x": -1207, "z": -2 },
+        { "x": -2631, "z": 914 },
+        { "x": -4449, "z": 1923 },
+        { "x": -6218, "z": 3300 },
+        { "x": -8000, "z": 3975 }
+      ]
+    },
+    {
+      "id": "lane_mid",
+      "tag": "lane",
+      "height": "low",
+      "faction": "neutral",
+      "polygon": [
+        { "x": -5441, "z": -4913 },
+        { "x": -2967, "z": -2834 },
+        { "x": -1482, "z": -1053 },
+        { "x": -276, "z": 254 },
+        { "x": 918, "z": 1547 },
+        { "x": 2433, "z": 3366 },
+        { "x": 4959, "z": 5487 },
+        { "x": 5441, "z": 4913 },
+        { "x": 2967, "z": 2834 },
+        { "x": 1482, "z": 1053 },
+        { "x": 276, "z": -254 },
+        { "x": -918, "z": -1547 },
+        { "x": -2433, "z": -3366 },
+        { "x": -4959, "z": -5487 }
+      ]
+    },
+    {
+      "id": "w_base",
+      "tag": "base",
+      "height": "high",
+      "faction": "wardens",
+      "polygon": [
+        { "x": -7700, "z": -7700 },
+        { "x": -3400, "z": -7700 },
+        { "x": -3200, "z": -5400 },
+        { "x": -4000, "z": -4000 },
+        { "x": -5400, "z": -3200 },
+        { "x": -7700, "z": -3400 }
+      ]
+    },
+    {
+      "id": "w_jungle_primary",
+      "tag": "jungle",
+      "height": "low",
+      "faction": "wardens",
+      "polygon": [
+        { "x": -3300, "z": -6200 },
+        { "x": 5200, "z": -6200 },
+        { "x": 5800, "z": -5800 },
+        { "x": 6200, "z": -5000 },
+        { "x": 6200, "z": -4500 },
+        { "x": 4600, "z": -3200 },
+        { "x": 2600, "z": -2100 },
+        { "x": 1000, "z": -1000 },
+        { "x": -850, "z": -1500 },
+        { "x": -2100, "z": -3100 },
+        { "x": -3400, "z": -4200 }
+      ]
+    },
+    {
+      "id": "w_jungle_secondary",
+      "tag": "jungle",
+      "height": "low",
+      "faction": "wardens",
+      "polygon": [
+        { "x": -6300, "z": -2900 },
+        { "x": -5000, "z": -2900 },
+        { "x": -3700, "z": -3400 },
+        { "x": -2500, "z": -2300 },
+        { "x": -2000, "z": -1400 },
+        { "x": -1900, "z": 200 },
+        { "x": -3500, "z": 1100 },
+        { "x": -5000, "z": 2100 },
+        { "x": -6300, "z": 2900 }
+      ]
+    },
+    {
+      "id": "w_overlook_east",
+      "tag": "highground",
+      "height": "mid",
+      "faction": "wardens",
+      "polygon": [
+        { "x": 1916, "z": -2110 },
+        { "x": 1500, "z": -1870 },
+        { "x": 1084, "z": -2110 },
+        { "x": 1084, "z": -2590 },
+        { "x": 1500, "z": -2830 },
+        { "x": 1916, "z": -2590 }
+      ]
+    },
+    {
+      "id": "w_overlook_west",
+      "tag": "highground",
+      "height": "mid",
+      "faction": "wardens",
+      "polygon": [
+        { "x": -2370, "z": 250 },
+        { "x": -2585, "z": 622 },
+        { "x": -3015, "z": 622 },
+        { "x": -3230, "z": 250 },
+        { "x": -3015, "z": -122 },
+        { "x": -2585, "z": -122 }
+      ]
+    },
+    {
+      "id": "w_rocks_east",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "wardens",
+      "polygon": [
+        { "x": 800, "z": -5850 },
+        { "x": 1500, "z": -5800 },
+        { "x": 1600, "z": -5500 },
+        { "x": 900, "z": -5450 }
+      ]
+    },
+    {
+      "id": "w_rocks_west",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "wardens",
+      "polygon": [
+        { "x": -3600, "z": -2900 },
+        { "x": -3200, "z": -2700 },
+        { "x": -3350, "z": -2300 },
+        { "x": -3750, "z": -2500 }
+      ]
+    },
+    {
+      "id": "lane_top",
+      "tag": "lane",
+      "height": "low",
+      "faction": "neutral",
+      "polygon": [
+        { "x": -6973, "z": -5041 },
+        { "x": -7174, "z": -3234 },
+        { "x": -7376, "z": -395 },
+        { "x": -7077, "z": 2602 },
+        { "x": -7282, "z": 4856 },
+        { "x": -6581, "z": 6608 },
+        { "x": -4639, "z": 7180 },
+        { "x": -2204, "z": 6977 },
+        { "x": 594, "z": 7277 },
+        { "x": 3225, "z": 7074 },
+        { "x": 5021, "z": 6974 },
+        { "x": 4979, "z": 6226 },
+        { "x": 3175, "z": 6326 },
+        { "x": 606, "z": 6523 },
+        { "x": -2196, "z": 6223 },
+        { "x": -4561, "z": 6420 },
+        { "x": -6019, "z": 5992 },
+        { "x": -6518, "z": 4744 },
+        { "x": -6323, "z": 2598 },
+        { "x": -6624, "z": -405 },
+        { "x": -6426, "z": -3166 },
+        { "x": -6227, "z": -4959 }
+      ]
+    },
+    {
+      "id": "h_base",
+      "tag": "base",
+      "height": "high",
+      "faction": "hollow",
+      "polygon": [
+        { "x": 7700, "z": 7700 },
+        { "x": 3400, "z": 7700 },
+        { "x": 3200, "z": 5400 },
+        { "x": 4000, "z": 4000 },
+        { "x": 5400, "z": 3200 },
+        { "x": 7700, "z": 3400 }
+      ]
+    },
+    {
+      "id": "h_jungle_primary",
+      "tag": "jungle",
+      "height": "low",
+      "faction": "hollow",
+      "polygon": [
+        { "x": 3300, "z": 6200 },
+        { "x": -5200, "z": 6200 },
+        { "x": -5800, "z": 5800 },
+        { "x": -6200, "z": 5000 },
+        { "x": -6200, "z": 4500 },
+        { "x": -4600, "z": 3200 },
+        { "x": -2600, "z": 2100 },
+        { "x": -1000, "z": 1000 },
+        { "x": 850, "z": 1500 },
+        { "x": 2100, "z": 3100 },
+        { "x": 3400, "z": 4200 }
+      ]
+    },
+    {
+      "id": "h_jungle_secondary",
+      "tag": "jungle",
+      "height": "low",
+      "faction": "hollow",
+      "polygon": [
+        { "x": 6300, "z": 2900 },
+        { "x": 5000, "z": 2900 },
+        { "x": 3700, "z": 3400 },
+        { "x": 2500, "z": 2300 },
+        { "x": 2000, "z": 1400 },
+        { "x": 1900, "z": -200 },
+        { "x": 3500, "z": -1100 },
+        { "x": 5000, "z": -2100 },
+        { "x": 6300, "z": -2900 }
+      ]
+    },
+    {
+      "id": "h_overlook_east",
+      "tag": "highground",
+      "height": "mid",
+      "faction": "hollow",
+      "polygon": [
+        { "x": -1916, "z": 2110 },
+        { "x": -1500, "z": 1870 },
+        { "x": -1084, "z": 2110 },
+        { "x": -1084, "z": 2590 },
+        { "x": -1500, "z": 2830 },
+        { "x": -1916, "z": 2590 }
+      ]
+    },
+    {
+      "id": "h_overlook_west",
+      "tag": "highground",
+      "height": "mid",
+      "faction": "hollow",
+      "polygon": [
+        { "x": 2370, "z": -250 },
+        { "x": 2585, "z": -622 },
+        { "x": 3015, "z": -622 },
+        { "x": 3230, "z": -250 },
+        { "x": 3015, "z": 122 },
+        { "x": 2585, "z": 122 }
+      ]
+    },
+    {
+      "id": "h_rocks_east",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "hollow",
+      "polygon": [
+        { "x": -800, "z": 5850 },
+        { "x": -1500, "z": 5800 },
+        { "x": -1600, "z": 5500 },
+        { "x": -900, "z": 5450 }
+      ]
+    },
+    {
+      "id": "h_rocks_west",
+      "tag": "unwalkable",
+      "height": "high",
+      "faction": "hollow",
+      "polygon": [
+        { "x": 3600, "z": 2900 },
+        { "x": 3200, "z": 2700 },
+        { "x": 3350, "z": 2300 },
+        { "x": 3750, "z": 2500 }
+      ]
+    },
+    {
+      "id": "lane_bottom",
+      "tag": "lane",
+      "height": "low",
+      "faction": "neutral",
+      "polygon": [
+        { "x": 6973, "z": 5041 },
+        { "x": 7174, "z": 3234 },
+        { "x": 7376, "z": 395 },
+        { "x": 7077, "z": -2602 },
+        { "x": 7282, "z": -4856 },
+        { "x": 6581, "z": -6608 },
+        { "x": 4639, "z": -7180 },
+        { "x": 2204, "z": -6977 },
+        { "x": -594, "z": -7277 },
+        { "x": -3225, "z": -7074 },
+        { "x": -5021, "z": -6974 },
+        { "x": -4979, "z": -6226 },
+        { "x": -3175, "z": -6326 },
+        { "x": -606, "z": -6523 },
+        { "x": 2196, "z": -6223 },
+        { "x": 4561, "z": -6420 },
+        { "x": 6019, "z": -5992 },
+        { "x": 6518, "z": -4744 },
+        { "x": 6323, "z": -2598 },
+        { "x": 6624, "z": 405 },
+        { "x": 6426, "z": 3166 },
+        { "x": 6227, "z": 4959 }
+      ]
+    },
+    {
+      "id": "boss_pit",
+      "tag": "pit",
+      "height": "river",
+      "faction": "neutral",
+      "polygon": [
+        { "x": 3508, "z": -2790 },
+        { "x": 3210, "z": -2492 },
+        { "x": 2790, "z": -2492 },
+        { "x": 2492, "z": -2790 },
+        { "x": 2492, "z": -3210 },
+        { "x": 2790, "z": -3508 },
+        { "x": 3210, "z": -3508 },
+        { "x": 3508, "z": -3210 }
+      ]
+    }
+  ],
+  "ramps": [
+    {
+      "id": "w_ramp_base_top",
+      "position": { "x": -6788, "z": -3310 },
+      "direction": 276,
+      "width": 900,
+      "length": 500,
+      "from": "low",
+      "to": "high"
+    },
+    {
+      "id": "w_ramp_base_mid",
+      "position": { "x": -3883, "z": -4094 },
+      "direction": 220,
+      "width": 900,
+      "length": 500,
+      "from": "low",
+      "to": "high"
+    },
+    {
+      "id": "w_ramp_base_bottom",
+      "position": { "x": -3303, "z": -6694 },
+      "direction": 177,
+      "width": 900,
+      "length": 500,
+      "from": "low",
+      "to": "high"
+    },
+    {
+      "id": "w_ramp_overlook_east",
+      "position": { "x": 1500, "z": -2930 },
+      "direction": 90,
+      "width": 360,
+      "length": 300,
+      "from": "low",
+      "to": "mid"
+    },
+    {
+      "id": "w_ramp_overlook_west",
+      "position": { "x": -3330, "z": 250 },
+      "direction": 0,
+      "width": 360,
+      "length": 300,
+      "from": "low",
+      "to": "mid"
+    },
+    {
+      "id": "h_ramp_base_bottom",
+      "position": { "x": 6788, "z": 3310 },
+      "direction": 96,
+      "width": 900,
+      "length": 500,
+      "from": "low",
+      "to": "high"
+    },
+    {
+      "id": "h_ramp_base_mid",
+      "position": { "x": 3883, "z": 4094 },
+      "direction": 40,
+      "width": 900,
+      "length": 500,
+      "from": "low",
+      "to": "high"
+    },
+    {
+      "id": "h_ramp_base_top",
+      "position": { "x": 3303, "z": 6694 },
+      "direction": 357,
+      "width": 900,
+      "length": 500,
+      "from": "low",
+      "to": "high"
+    },
+    {
+      "id": "h_ramp_overlook_east",
+      "position": { "x": -1500, "z": 2930 },
+      "direction": 270,
+      "width": 360,
+      "length": 300,
+      "from": "low",
+      "to": "mid"
+    },
+    {
+      "id": "h_ramp_overlook_west",
+      "position": { "x": 3330, "z": -250 },
+      "direction": 180,
+      "width": 360,
+      "length": 300,
+      "from": "low",
+      "to": "mid"
+    }
+  ],
+  "treeZones": [
+    {
+      "id": "w_trees_west_edge",
+      "density": 0.75,
+      "seed": 101,
+      "polygon": [
+        { "x": -7700, "z": -3300 },
+        { "x": -7250, "z": -3300 },
+        { "x": -7450, "z": -400 },
+        { "x": -7150, "z": 2600 },
+        { "x": -7300, "z": 3500 },
+        { "x": -7700, "z": 3600 }
+      ]
+    },
+    {
+      "id": "w_trees_south_edge",
+      "density": 0.75,
+      "seed": 102,
+      "polygon": [
+        { "x": -3300, "z": -7700 },
+        { "x": 6600, "z": -7700 },
+        { "x": 6000, "z": -7250 },
+        { "x": 4600, "z": -7250 },
+        { "x": 2200, "z": -7000 },
+        { "x": -600, "z": -7300 },
+        { "x": -3200, "z": -7100 }
+      ]
+    },
+    {
+      "id": "w_trees_east_edge",
+      "density": 0.7,
+      "seed": 103,
+      "polygon": [
+        { "x": 7300, "z": -6400 },
+        { "x": 7700, "z": -6400 },
+        { "x": 7700, "z": -4900 },
+        { "x": 7300, "z": -4800 }
+      ]
+    },
+    {
+      "id": "w_trees_primary",
+      "density": 0.45,
+      "seed": 104,
+      "polygon": [
+        { "x": -3300, "z": -6200 },
+        { "x": 5200, "z": -6200 },
+        { "x": 5800, "z": -5800 },
+        { "x": 6200, "z": -5000 },
+        { "x": 6200, "z": -4500 },
+        { "x": 4600, "z": -3200 },
+        { "x": 2600, "z": -2100 },
+        { "x": 1000, "z": -1000 },
+        { "x": -850, "z": -1500 },
+        { "x": -2100, "z": -3100 },
+        { "x": -3400, "z": -4200 }
+      ]
+    },
+    {
+      "id": "w_trees_secondary",
+      "density": 0.45,
+      "seed": 105,
+      "polygon": [
+        { "x": -6300, "z": -2900 },
+        { "x": -5000, "z": -2900 },
+        { "x": -3700, "z": -3400 },
+        { "x": -2500, "z": -2300 },
+        { "x": -2000, "z": -1400 },
+        { "x": -1900, "z": 200 },
+        { "x": -3500, "z": 1100 },
+        { "x": -5000, "z": 2100 },
+        { "x": -6300, "z": 2900 }
+      ]
+    },
+    {
+      "id": "w_trees_base_rim",
+      "density": 0.6,
+      "seed": 106,
+      "polygon": [
+        { "x": -6200, "z": -3300 },
+        { "x": -5400, "z": -3150 },
+        { "x": -4100, "z": -3900 },
+        { "x": -4700, "z": -3200 },
+        { "x": -5600, "z": -2950 }
+      ]
+    },
+    {
+      "id": "h_trees_west_edge",
+      "density": 0.75,
+      "seed": 101,
+      "polygon": [
+        { "x": 7700, "z": 3300 },
+        { "x": 7250, "z": 3300 },
+        { "x": 7450, "z": 400 },
+        { "x": 7150, "z": -2600 },
+        { "x": 7300, "z": -3500 },
+        { "x": 7700, "z": -3600 }
+      ]
+    },
+    {
+      "id": "h_trees_south_edge",
+      "density": 0.75,
+      "seed": 102,
+      "polygon": [
+        { "x": 3300, "z": 7700 },
+        { "x": -6600, "z": 7700 },
+        { "x": -6000, "z": 7250 },
+        { "x": -4600, "z": 7250 },
+        { "x": -2200, "z": 7000 },
+        { "x": 600, "z": 7300 },
+        { "x": 3200, "z": 7100 }
+      ]
+    },
+    {
+      "id": "h_trees_east_edge",
+      "density": 0.7,
+      "seed": 103,
+      "polygon": [
+        { "x": -7300, "z": 6400 },
+        { "x": -7700, "z": 6400 },
+        { "x": -7700, "z": 4900 },
+        { "x": -7300, "z": 4800 }
+      ]
+    },
+    {
+      "id": "h_trees_primary",
+      "density": 0.45,
+      "seed": 104,
+      "polygon": [
+        { "x": 3300, "z": 6200 },
+        { "x": -5200, "z": 6200 },
+        { "x": -5800, "z": 5800 },
+        { "x": -6200, "z": 5000 },
+        { "x": -6200, "z": 4500 },
+        { "x": -4600, "z": 3200 },
+        { "x": -2600, "z": 2100 },
+        { "x": -1000, "z": 1000 },
+        { "x": 850, "z": 1500 },
+        { "x": 2100, "z": 3100 },
+        { "x": 3400, "z": 4200 }
+      ]
+    },
+    {
+      "id": "h_trees_secondary",
+      "density": 0.45,
+      "seed": 105,
+      "polygon": [
+        { "x": 6300, "z": 2900 },
+        { "x": 5000, "z": 2900 },
+        { "x": 3700, "z": 3400 },
+        { "x": 2500, "z": 2300 },
+        { "x": 2000, "z": 1400 },
+        { "x": 1900, "z": -200 },
+        { "x": 3500, "z": -1100 },
+        { "x": 5000, "z": -2100 },
+        { "x": 6300, "z": -2900 }
+      ]
+    },
+    {
+      "id": "h_trees_base_rim",
+      "density": 0.6,
+      "seed": 106,
+      "polygon": [
+        { "x": 6200, "z": 3300 },
+        { "x": 5400, "z": 3150 },
+        { "x": 4100, "z": 3900 },
+        { "x": 4700, "z": 3200 },
+        { "x": 5600, "z": 2950 }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "w_tower_top_t1",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "top",
+      "tier": 1,
+      "position": { "x": -6282, "z": 3308 },
+      "facing": 95
+    },
+    {
+      "id": "w_tower_top_t2",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "top",
+      "tier": 2,
+      "position": { "x": -6484, "z": -68 },
+      "facing": 84
+    },
+    {
+      "id": "w_tower_top_t3",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "top",
+      "tier": 3,
+      "position": { "x": -6283, "z": -3506 },
+      "facing": 96
+    },
+    {
+      "id": "w_barracks_top_melee",
+      "faction": "wardens",
+      "type": "barracks_melee",
+      "lane": "top",
+      "position": { "x": -7146, "z": -4256 },
+      "facing": 96
+    },
+    {
+      "id": "w_barracks_top_ranged",
+      "faction": "wardens",
+      "type": "barracks_ranged",
+      "lane": "top",
+      "position": { "x": -6231, "z": -4154 },
+      "facing": 96
+    },
+    {
+      "id": "w_tower_mid_t1",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "mid",
+      "tier": 1,
+      "position": { "x": -843, "z": -1621 },
+      "facing": 49
+    },
+    {
+      "id": "w_tower_mid_t2",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "mid",
+      "tier": 2,
+      "position": { "x": -2053, "z": -3073 },
+      "facing": 50
+    },
+    {
+      "id": "w_tower_mid_t3",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "mid",
+      "tier": 3,
+      "position": { "x": -3781, "z": -4635 },
+      "facing": 40
+    },
+    {
+      "id": "w_barracks_mid_melee",
+      "faction": "wardens",
+      "type": "barracks_melee",
+      "lane": "mid",
+      "position": { "x": -4883, "z": -4333 },
+      "facing": 40
+    },
+    {
+      "id": "w_barracks_mid_ranged",
+      "faction": "wardens",
+      "type": "barracks_ranged",
+      "lane": "mid",
+      "position": { "x": -4292, "z": -5038 },
+      "facing": 40
+    },
+    {
+      "id": "w_tower_bottom_t1",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "bottom",
+      "tier": 1,
+      "position": { "x": 5278, "z": -7101 },
+      "facing": 16
+    },
+    {
+      "id": "w_tower_bottom_t2",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "bottom",
+      "tier": 2,
+      "position": { "x": 1131, "z": -7197 },
+      "facing": 6
+    },
+    {
+      "id": "w_tower_bottom_t3",
+      "faction": "wardens",
+      "type": "tower",
+      "lane": "bottom",
+      "tier": 3,
+      "position": { "x": -3579, "z": -7160 },
+      "facing": 357
+    },
+    {
+      "id": "w_barracks_bottom_melee",
+      "faction": "wardens",
+      "type": "barracks_melee",
+      "lane": "bottom",
+      "position": { "x": -4176, "z": -6185 },
+      "facing": 357
+    },
+    {
+      "id": "w_barracks_bottom_ranged",
+      "faction": "wardens",
+      "type": "barracks_ranged",
+      "lane": "bottom",
+      "position": { "x": -4227, "z": -7104 },
+      "facing": 357
+    },
+    {
+      "id": "w_tower_t4_a",
+      "faction": "wardens",
+      "type": "tower",
+      "tier": 4,
+      "position": { "x": -5250, "z": -5850 },
+      "facing": 45
+    },
+    {
+      "id": "w_tower_t4_b",
+      "faction": "wardens",
+      "type": "tower",
+      "tier": 4,
+      "position": { "x": -5850, "z": -5250 },
+      "facing": 45
+    },
+    {
+      "id": "w_ancient",
+      "faction": "wardens",
+      "type": "ancient",
+      "position": { "x": -6000, "z": -6000 },
+      "facing": 45
+    },
+    {
+      "id": "w_fountain",
+      "faction": "wardens",
+      "type": "fountain",
+      "position": { "x": -7150, "z": -7150 },
+      "facing": 45
+    },
+    {
+      "id": "w_shop_base",
+      "faction": "wardens",
+      "type": "shop_base",
+      "position": { "x": -6500, "z": -7350 },
+      "facing": 90
+    },
+    {
+      "id": "w_shop_side",
+      "faction": "neutral",
+      "type": "shop_side",
+      "lane": "top",
+      "position": { "x": -7440, "z": 1736 },
+      "facing": 0
+    },
+    {
+      "id": "w_shop_secret",
+      "faction": "neutral",
+      "type": "shop_secret",
+      "position": { "x": -5600, "z": 1500 },
+      "facing": 315
+    },
+    {
+      "id": "h_tower_top_t1",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "bottom",
+      "tier": 1,
+      "position": { "x": 6282, "z": -3308 },
+      "facing": 275
+    },
+    {
+      "id": "h_tower_top_t2",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "bottom",
+      "tier": 2,
+      "position": { "x": 6484, "z": 68 },
+      "facing": 264
+    },
+    {
+      "id": "h_tower_top_t3",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "bottom",
+      "tier": 3,
+      "position": { "x": 6283, "z": 3506 },
+      "facing": 276
+    },
+    {
+      "id": "h_barracks_top_melee",
+      "faction": "hollow",
+      "type": "barracks_melee",
+      "lane": "bottom",
+      "position": { "x": 7146, "z": 4256 },
+      "facing": 276
+    },
+    {
+      "id": "h_barracks_top_ranged",
+      "faction": "hollow",
+      "type": "barracks_ranged",
+      "lane": "bottom",
+      "position": { "x": 6231, "z": 4154 },
+      "facing": 276
+    },
+    {
+      "id": "h_tower_mid_t1",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "mid",
+      "tier": 1,
+      "position": { "x": 843, "z": 1621 },
+      "facing": 229
+    },
+    {
+      "id": "h_tower_mid_t2",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "mid",
+      "tier": 2,
+      "position": { "x": 2053, "z": 3073 },
+      "facing": 230
+    },
+    {
+      "id": "h_tower_mid_t3",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "mid",
+      "tier": 3,
+      "position": { "x": 3781, "z": 4635 },
+      "facing": 220
+    },
+    {
+      "id": "h_barracks_mid_melee",
+      "faction": "hollow",
+      "type": "barracks_melee",
+      "lane": "mid",
+      "position": { "x": 4883, "z": 4333 },
+      "facing": 220
+    },
+    {
+      "id": "h_barracks_mid_ranged",
+      "faction": "hollow",
+      "type": "barracks_ranged",
+      "lane": "mid",
+      "position": { "x": 4292, "z": 5038 },
+      "facing": 220
+    },
+    {
+      "id": "h_tower_bottom_t1",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "top",
+      "tier": 1,
+      "position": { "x": -5278, "z": 7101 },
+      "facing": 196
+    },
+    {
+      "id": "h_tower_bottom_t2",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "top",
+      "tier": 2,
+      "position": { "x": -1131, "z": 7197 },
+      "facing": 186
+    },
+    {
+      "id": "h_tower_bottom_t3",
+      "faction": "hollow",
+      "type": "tower",
+      "lane": "top",
+      "tier": 3,
+      "position": { "x": 3579, "z": 7160 },
+      "facing": 177
+    },
+    {
+      "id": "h_barracks_bottom_melee",
+      "faction": "hollow",
+      "type": "barracks_melee",
+      "lane": "top",
+      "position": { "x": 4176, "z": 6185 },
+      "facing": 177
+    },
+    {
+      "id": "h_barracks_bottom_ranged",
+      "faction": "hollow",
+      "type": "barracks_ranged",
+      "lane": "top",
+      "position": { "x": 4227, "z": 7104 },
+      "facing": 177
+    },
+    {
+      "id": "h_tower_t4_a",
+      "faction": "hollow",
+      "type": "tower",
+      "tier": 4,
+      "position": { "x": 5250, "z": 5850 },
+      "facing": 225
+    },
+    {
+      "id": "h_tower_t4_b",
+      "faction": "hollow",
+      "type": "tower",
+      "tier": 4,
+      "position": { "x": 5850, "z": 5250 },
+      "facing": 225
+    },
+    {
+      "id": "h_ancient",
+      "faction": "hollow",
+      "type": "ancient",
+      "position": { "x": 6000, "z": 6000 },
+      "facing": 225
+    },
+    {
+      "id": "h_fountain",
+      "faction": "hollow",
+      "type": "fountain",
+      "position": { "x": 7150, "z": 7150 },
+      "facing": 225
+    },
+    {
+      "id": "h_shop_base",
+      "faction": "hollow",
+      "type": "shop_base",
+      "position": { "x": 6500, "z": 7350 },
+      "facing": 270
+    },
+    {
+      "id": "h_shop_side",
+      "faction": "neutral",
+      "type": "shop_side",
+      "lane": "bottom",
+      "position": { "x": 7440, "z": -1736 },
+      "facing": 180
+    },
+    {
+      "id": "h_shop_secret",
+      "faction": "neutral",
+      "type": "shop_secret",
+      "position": { "x": 5600, "z": -1500 },
+      "facing": 135
+    }
+  ],
+  "camps": [
+    {
+      "id": "w_camp_ancient",
+      "tier": "ancient",
+      "side": "wardens",
+      "position": { "x": 4600, "z": -4800 },
+      "spawnBoxRadius": 420
+    },
+    {
+      "id": "w_camp_large_east",
+      "tier": "large",
+      "side": "wardens",
+      "position": { "x": 1200, "z": -4000 },
+      "spawnBoxRadius": 380
+    },
+    {
+      "id": "w_camp_medium_south",
+      "tier": "medium",
+      "side": "wardens",
+      "position": { "x": -400, "z": -5300 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "w_camp_medium_east",
+      "tier": "medium",
+      "side": "wardens",
+      "position": { "x": 2700, "z": -5400 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "w_camp_small_east",
+      "tier": "small",
+      "side": "wardens",
+      "position": { "x": -1700, "z": -3800 },
+      "spawnBoxRadius": 300
+    },
+    {
+      "id": "w_camp_large_west",
+      "tier": "large",
+      "side": "wardens",
+      "position": { "x": -4300, "z": -2100 },
+      "spawnBoxRadius": 380
+    },
+    {
+      "id": "w_camp_medium_west",
+      "tier": "medium",
+      "side": "wardens",
+      "position": { "x": -5600, "z": -500 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "w_camp_medium_north",
+      "tier": "medium",
+      "side": "wardens",
+      "position": { "x": -2900, "z": -700 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "w_camp_small_west",
+      "tier": "small",
+      "side": "wardens",
+      "position": { "x": -4100, "z": 600 },
+      "spawnBoxRadius": 300
+    },
+    {
+      "id": "h_camp_ancient",
+      "tier": "ancient",
+      "side": "hollow",
+      "position": { "x": -4600, "z": 4800 },
+      "spawnBoxRadius": 420
+    },
+    {
+      "id": "h_camp_large_east",
+      "tier": "large",
+      "side": "hollow",
+      "position": { "x": -1200, "z": 4000 },
+      "spawnBoxRadius": 380
+    },
+    {
+      "id": "h_camp_medium_south",
+      "tier": "medium",
+      "side": "hollow",
+      "position": { "x": 400, "z": 5300 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "h_camp_medium_east",
+      "tier": "medium",
+      "side": "hollow",
+      "position": { "x": -2700, "z": 5400 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "h_camp_small_east",
+      "tier": "small",
+      "side": "hollow",
+      "position": { "x": 1700, "z": 3800 },
+      "spawnBoxRadius": 300
+    },
+    {
+      "id": "h_camp_large_west",
+      "tier": "large",
+      "side": "hollow",
+      "position": { "x": 4300, "z": 2100 },
+      "spawnBoxRadius": 380
+    },
+    {
+      "id": "h_camp_medium_west",
+      "tier": "medium",
+      "side": "hollow",
+      "position": { "x": 5600, "z": 500 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "h_camp_medium_north",
+      "tier": "medium",
+      "side": "hollow",
+      "position": { "x": 2900, "z": 700 },
+      "spawnBoxRadius": 340
+    },
+    {
+      "id": "h_camp_small_west",
+      "tier": "small",
+      "side": "hollow",
+      "position": { "x": 4100, "z": -600 },
+      "spawnBoxRadius": 300
+    }
+  ],
+  "runeSpots": [
+    {
+      "id": "rune_west",
+      "position": { "x": -2200, "z": 1200 }
+    },
+    {
+      "id": "rune_east",
+      "position": { "x": 2200, "z": -1200 }
+    }
+  ],
+  "bossPit": {
+    "position": { "x": 3000, "z": -3000 },
+    "radius": 550,
+    "entranceFacing": 90
+  },
+  "spawnPoints": {
+    "wardens": [
+      { "x": -6952, "z": -6952 },
+      { "x": -7277, "z": -6901 },
+      { "x": -7427, "z": -7194 },
+      { "x": -7194, "z": -7427 },
+      { "x": -6901, "z": -7277 }
+    ],
+    "hollow": [
+      { "x": 6952, "z": 6952 },
+      { "x": 7277, "z": 6901 },
+      { "x": 7427, "z": 7194 },
+      { "x": 7194, "z": 7427 },
+      { "x": 6901, "z": 7277 }
+    ]
+  }
+}
