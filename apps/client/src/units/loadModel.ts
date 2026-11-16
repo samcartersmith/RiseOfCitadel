@@ -6,6 +6,7 @@ import type { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
 import { AnimationController, type AnimationControllerOptions } from './animation';
 import type { ModelViewConfig } from './modelConfig';
+import { mergeSkinnedParts } from './mergeModel';
 
 export interface LoadedModel {
   config: ModelViewConfig;
@@ -14,6 +15,16 @@ export interface LoadedModel {
   meshes: AbstractMesh[];
   animator: AnimationController;
   dispose(): void;
+}
+
+export interface LoadModelOptions extends Omit<AnimationControllerOptions, 'scene' | 'clipSpeed'> {
+  /**
+   * Fold every visible part (skinned body + rigid props) into one skinned mesh
+   * per material, cutting a KayKit character from ~10 draw calls to 1-2.
+   * Used by UnitView; off by default so prop kit-bashing keeps separate meshes.
+   * See mergeModel.ts and docs/design/units.md.
+   */
+  mergeMeshes?: boolean;
 }
 
 const containers = new Map<string, Promise<AssetContainer>>();
@@ -63,21 +74,23 @@ export function applyPropVisibility(
 export async function loadModel(
   scene: Scene,
   config: ModelViewConfig,
-  options: Omit<AnimationControllerOptions, 'scene' | 'clipSpeed'> = {},
+  options: LoadModelOptions = {},
 ): Promise<LoadedModel> {
+  const { mergeMeshes, ...animOptions } = options;
   const c = await container(scene, config.url);
   // Keep original names so prop and clip lookups work; skinned meshes must be clones.
   const inst = c.instantiateModelsToScene((n) => n, false, { doNotInstantiate: true });
   const root = inst.rootNodes[0] as TransformNode;
   root.scaling.scaleInPlace(config.scale);
-  const meshes = root.getChildMeshes(false);
+  let meshes = root.getChildMeshes(false);
   const missing = applyPropVisibility(meshes, config.props);
   if (missing.length)
     console.warn(`[citadel] ${config.id}: props not found in GLB: ${missing.join(', ')}`);
+  if (mergeMeshes) meshes = mergeSkinnedParts(root, meshes, config.id);
   const animator = new AnimationController(inst.animationGroups, config.clips, {
     blendTime: config.blendTime,
     clipSpeed: config.clipSpeed,
-    ...options,
+    ...animOptions,
     scene,
   });
   return {
