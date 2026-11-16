@@ -19,7 +19,8 @@
     "validate:content": "pnpm --filter @citadel/content validate",
     "assets:fetch": "tsx tools/assets/fetch.ts",
     "assets:build": "tsx tools/assets/build.ts",
-    "assets:credits": "tsx tools/assets/credits.ts"
+    "assets:credits": "tsx tools/assets/credits.ts",
+    "map:svg": "tsx tools/map/render-svg.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
