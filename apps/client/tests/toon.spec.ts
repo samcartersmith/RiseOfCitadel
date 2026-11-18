@@ -24,7 +24,7 @@ async function freshStats(page: Page) {
 
 async function shot(page: Page, testInfo: TestInfo, name: string) {
   const path = testInfo.outputPath(`${name}.png`);
-  await page.screenshot({ path });
+  await page.screenshot({ path, timeout: 60_000 });
   await testInfo.attach(name, { path, contentType: 'image/png' });
 }
 
@@ -35,6 +35,8 @@ const PAGES = [
 
 for (const p of PAGES) {
   test(`toon sandbox (${p.name}) restyles the models within budget`, async ({ page }, testInfo) => {
+    // High tier (shadows + post) renders at ~1 fps under CI's software GL.
+    test.setTimeout(180_000);
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(p.url);
