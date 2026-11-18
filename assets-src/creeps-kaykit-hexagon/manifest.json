@@ -1,0 +1,18 @@
+{
+  "id": "creeps-kaykit-hexagon",
+  "name": "KayKit Medieval Hexagon Pack 1.0 (siege cuts)",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_medieval_hexagon_pack/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0", "ref": "main" }],
+  "models": [
+    {
+      "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/yellow/building_tower_catapult_yellow.gltf",
+      "out": "siege_catapult"
+    }
+  ],
+  "usedFor": "The catapult turret and arm on both factions' siege engines (on a wheeled chassis built in code)"
+}
