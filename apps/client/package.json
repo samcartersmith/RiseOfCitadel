@@ -17,6 +17,7 @@
   "dependencies": {
     "@babylonjs/core": "^9.36.0",
     "@babylonjs/loaders": "^9.36.0",
+    "@citadel/content": "workspace:*",
     "@citadel/protocol": "workspace:*",
     "@citadel/sim": "workspace:*"
   }

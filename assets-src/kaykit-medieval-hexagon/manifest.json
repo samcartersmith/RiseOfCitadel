@@ -8,5 +8,21 @@
   "licenseFile": "addons/kaykit_medieval_hexagon_pack/LICENSE.txt",
   "licenseMustContain": "Creative Commons Zero",
   "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0", "ref": "main" }],
+  "models": [
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_tower_A_blue.gltf", "out": "tower_a" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_tower_B_blue.gltf", "out": "tower_b" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_tower_base_blue.gltf", "out": "tower_base" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_barracks_blue.gltf", "out": "barracks" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_archeryrange_blue.gltf", "out": "archeryrange" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_market_blue.gltf", "out": "market" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_well_blue.gltf", "out": "well" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/props/flag_blue.gltf", "out": "flag" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/props/barrel.gltf", "out": "barrel" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/props/crate_A_big.gltf", "out": "crate" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/props/tent.gltf", "out": "tent" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/props/weaponrack.gltf", "out": "weaponrack" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/props/target.gltf", "out": "target" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/nature/mountain_A.gltf", "out": "mountain_a" }
+  ],
   "usedFor": "Towers, barracks, castle and nature pieces kit-bashed into structures and map props"
 }

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Structures Sandbox · Rise of Citadel</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #1b1a1f;
+        color: #efe6d2;
+        font:
+          12px/1.4 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+      }
+      #game {
+        width: 100%;
+        height: 100%;
+        display: block;
+        outline: none;
+        touch-action: none;
+      }
+      #overlay {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        background: rgb(0 0 0 / 0.55);
+        pointer-events: none;
+        user-select: none;
+      }
+      #overlay.hidden {
+        display: none;
+      }
+      #overlay .hud-body {
+        white-space: pre;
+      }
+      #overlay .over {
+        color: #e5484d;
+      }
+      #overlay .hud-tiers {
+        display: flex;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      #overlay .hud-tiers button {
+        pointer-events: auto;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        background: rgb(255 255 255 / 0.08);
+        border: 1px solid rgb(255 255 255 / 0.2);
+        border-radius: 3px;
+        padding: 1px 6px;
+      }
+      #overlay .hud-tiers button.active {
+        color: #1b1a1f;
+        background: #e8b54a;
+        border-color: #e8b54a;
+      }
+      #overlay .hud-hint {
+        margin-top: 4px;
+        opacity: 0.5;
+      }
+      #labels div {
+        position: fixed;
+        transform: translate(-100%, -50%);
+        padding: 2px 6px;
+        border-radius: 3px;
+        background: rgb(0 0 0 / 0.55);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      #labels .warden {
+        color: #e8b54a;
+      }
+      #labels .hollow {
+        color: #b48cf0;
+      }
+      #panel {
+        position: fixed;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 14px;
+        align-items: center;
+        padding: 8px;
+        border-radius: 6px;
+        background: rgb(0 0 0 / 0.6);
+      }
+      #panel button {
+        font: inherit;
+        color: inherit;
+        background: #2e2b33;
+        border: 1px solid #5e5a63;
+        border-radius: 4px;
+        padding: 3px 7px;
+        cursor: pointer;
+      }
+      #panel button.on {
+        background: #b07a3c;
+        border-color: #e8b54a;
+      }
+      #panel label {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      #panel input[type='range'] {
+        width: 90px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="overlay">booting…</div>
+    <div id="labels"></div>
+    <div id="panel"></div>
+    <script type="module" src="/src/sandbox/structures.ts"></script>
+  </body>
+</html>
