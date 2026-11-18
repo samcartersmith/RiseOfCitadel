@@ -3,6 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   timeout: 60_000,
+  // CI renders WebGL2 in software (SwiftShader) on a few cores; parallel workers starve each
+  // other and push screenshots past their timeouts. Run serially there.
+  workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: 'http://localhost:4173',
