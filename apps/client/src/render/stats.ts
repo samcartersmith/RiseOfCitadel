@@ -21,6 +21,8 @@ export interface CitadelStats {
   totalVertices: number;
   /** Used JS heap in MB where `performance.memory` exists (Chromium), else null. */
   jsHeapMB: number | null;
+  /** Active VFX effects, when a VFX system publishes them (vfx/index.ts `withVfxStats`). */
+  vfxActive?: number;
 }
 
 interface PerformanceMemory {
