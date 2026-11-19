@@ -10,14 +10,10 @@
  * so the axes carry over unchanged. See docs/design/structures.md.
  */
 import type { Owner, Structure } from '@citadel/content';
+import { MAP_UNITS_PER_WORLD_UNIT } from '../scale';
 
-/**
- * Map units per world unit. 32 puts the 16000-unit map at 500 world units, a
- * 750-unit lane at ~23 world units (about 11 displayed heroes abreast), and
- * keeps the default MOBA camera view (~90 world units wide) at ~2900 map units,
- * which is the usual MOBA screen. Terrain (M1-05) should share this constant.
- */
-export const MAP_UNITS_PER_WORLD_UNIT = 32;
+/** Map/world scale lives in `map/scale.ts`, shared with terrain; re-exported for callers. */
+export { MAP_UNITS_PER_WORLD_UNIT };
 
 /** Terrain height in world units at a world-space ground point. */
 export type HeightAt = (x: number, z: number) => number;
