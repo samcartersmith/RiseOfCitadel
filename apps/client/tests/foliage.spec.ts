@@ -8,6 +8,14 @@ async function waitReady(page: Page) {
   await page.waitForFunction(
     () => window.__citadelStats !== undefined && !!window.__citadelFoliage,
   );
+  // Headless can report the pointer at (0,0), inside the MOBA camera's edge-pan band, which
+  // drifts the view (and the counters) while we measure. Park it mid-screen and re-centre.
+  const vp = page.viewportSize()!;
+  await page.mouse.move(vp.width / 2, vp.height / 2);
+  await page.evaluate(() => {
+    const f = window.__citadelFoliage!;
+    f.view(f.currentView());
+  });
 }
 
 /** CI renders with software GL at ~1 fps on High: wait for frames, never wall-clock time. */
