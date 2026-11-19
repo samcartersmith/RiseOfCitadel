@@ -1,8 +1,8 @@
 /**
  * Unit sandbox (/units.html): N units (default 50, `?n=`) driven by a fake
  * "sim" through plain UnitViewStates, rendered by UnitViewManager under the
- * MOBA camera. Heroes (knight / rogue_hooded / mage) and skeleton creeps on
- * both teams plus a few neutrals walk, fight, take damage, die and respawn.
+ * MOBA camera. Heroes (knight / rogue_hooded / mage, plus Bulwark through the
+ * custom-model registry) and skeleton creeps on both teams plus a few neutrals walk, fight, take damage, die and respawn.
  *
  * Click selects (shift adds), hovering highlights. Slider: unit count 0-100.
  * Debug hook for tests: window.__citadelUnits. Ready flag: window.__citadelReady.
@@ -14,6 +14,8 @@ import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
+import type { AnimationGroup } from '@babylonjs/core/Animations/animationGroup';
 import { createEngine } from '../render/engine';
 import { readStats, type CitadelStats } from '../render/stats';
 import { createPerfHud } from '../render/hud';
@@ -22,7 +24,14 @@ import { UnitViewManager, type UnitViewCounts } from '../units/unitViewManager';
 import { facingOf } from '../units/motion';
 import { setUnitLookFactory } from '../units/look';
 import type { RingKind } from '../units/rings';
-import type { ModelId } from '../units/modelConfig';
+import { MODEL_CONFIGS } from '../units/modelConfig';
+import { loadModel, type LoadedModel } from '../units/loadModel';
+import { mergeSkinnedParts } from '../units/mergeModel';
+import type { UnitModelId } from '../units/modelRegistry';
+import { installToonUnitLook } from '../render/shaders/toonUnitLook';
+import { CitadelToonMaterial } from '../render/shaders/citadelToonMaterial';
+import { registerBulwarkUnitModel } from '../heroes/bulwark/unitModel';
+import { skinnedWorldBounds, type SkinnedBounds } from '../units/skinBounds';
 import type { Team, UnitId, UnitViewState } from '../units/unitState';
 
 export interface CitadelUnitsDebug {
@@ -48,6 +57,35 @@ export interface CitadelUnitsDebug {
   screenPos(id: UnitId): { x: number; y: number } | null;
   pick(x: number, y: number): UnitId | null;
   frames(): number;
+  /**
+   * Merge regression check (tests/unitMerge.spec.ts): loads three knights under
+   * identically transformed (rotated, scaled, offset) parents (unmerged; merged
+   * after being parented; merged by loadModel before being parented), poses all
+   * three on the same clip frame, and returns their CPU-skinned world bounds.
+   * Then turns the parents again and measures once more. With `keep` the three
+   * stay in the scene side by side for screenshots.
+   */
+  mergeCheck(opts?: MergeCheckOptions): Promise<MergeCheckResult>;
+  /** Enabled meshes a unit renders: name, material name, and whether it is a toon material. */
+  unitMeshes(id: UnitId): { name: string; material: string | null; toon: boolean }[];
+}
+
+export interface MergeCheckOptions {
+  clip?: string;
+  frame?: number;
+  /** Parent rotation (radians, Euler XYZ) for the first measurement. */
+  rotation?: [number, number, number];
+  /** Parent rotation for the second measurement. */
+  rotation2?: [number, number, number];
+  keep?: boolean;
+}
+
+export interface MergeCheckResult {
+  /** [first rotation, second rotation] for each variant. */
+  unmerged: SkinnedBounds[];
+  mergedUnderParent: SkinnedBounds[];
+  mergedByLoadModel: SkinnedBounds[];
+  meshCounts: { unmerged: number; mergedUnderParent: number; mergedByLoadModel: number };
 }
 
 declare global {
@@ -102,9 +140,15 @@ lane.position.y = 0.01;
 lane.material = flat('m-lane', '#8A7A5C');
 lane.isPickable = false;
 
+// Startup wiring the game needs too (docs/design/units.md §5, §9): the toon
+// look for every UnitView, and custom hero models registered before any view.
+// `?look=fallback` keeps M1-13's rim look; `?look=0` turns looks off.
 if (params.get('look') === '0') {
   setUnitLookFactory(() => ({ setTeam() {}, setHighlight() {}, dispose() {} }));
+} else if (params.get('look') !== 'fallback') {
+  installToonUnitLook();
 }
+registerBulwarkUnitModel();
 const manager = new UnitViewManager(scene, {
   localTeam: 'wardens',
   mergeMeshes: params.get('merge') !== '0',
@@ -141,7 +185,8 @@ interface Driven {
   range: number;
 }
 
-const HERO_MODELS: ModelId[] = ['knight', 'rogue_hooded', 'mage'];
+/** Bulwark is a registered custom model (heroes/bulwark/unitModel.ts), not a base GLB. */
+const HERO_MODELS: UnitModelId[] = ['knight', 'rogue_hooded', 'mage', 'bulwark'];
 
 function spawnPoint(team: Team, i: number): { x: number; z: number } {
   if (team === 'neutral') {
@@ -157,7 +202,9 @@ function makeUnit(i: number): Driven {
   const neutral = i % 12 === 11;
   const team: Team = neutral ? 'neutral' : i % 2 === 0 ? 'wardens' : 'hollow';
   const isHero = !neutral && (i >> 1) % 5 === 0;
-  const modelId: ModelId = isHero ? HERO_MODELS[(i >> 1) % 3]! : 'skeleton_minion';
+  const modelId: UnitModelId = isHero
+    ? HERO_MODELS[(i >> 1) % HERO_MODELS.length]!
+    : 'skeleton_minion';
   const maxHp = isHero ? 600 + 100 * Math.floor(between(0, 6)) : neutral ? 650 : 450;
   const maxMana = isHero ? 300 + 50 * Math.floor(between(0, 4)) : undefined;
   const p = spawnPoint(team, i);
@@ -413,7 +460,78 @@ window.__citadelUnits = {
   screenPos,
   pick: (x, y) => manager.pick(x, y),
   frames: () => frames,
+  mergeCheck,
+  unitMeshes: (id) =>
+    (manager.get(id)?.meshes ?? [])
+      .filter((m) => m.isEnabled())
+      .map((m) => ({
+        name: m.name,
+        material: m.material?.name ?? null,
+        toon: m.material instanceof CitadelToonMaterial,
+      })),
 };
+
+async function mergeCheck(opts: MergeCheckOptions = {}): Promise<MergeCheckResult> {
+  const {
+    clip = '1H_Melee_Attack_Chop',
+    frame = 20,
+    rotation = [0.35, 2.2, -0.25],
+    rotation2 = [-0.6, -1.1, 0.4],
+    keep = false,
+  } = opts;
+  const config = MODEL_CONFIGS.knight;
+  const parents = [0, 1, 2].map((i) => {
+    const p = new TransformNode(`merge-check-${i}`, scene);
+    p.position.set(0, 1, 30);
+    p.scaling.setAll(DISPLAY_SCALE);
+    p.rotation.set(...rotation);
+    return p;
+  });
+  const [unmerged, late, early] = await Promise.all([
+    loadModel(scene, config, { initialState: null }),
+    loadModel(scene, config, { initialState: null }),
+    loadModel(scene, config, { initialState: null, mergeMeshes: true }),
+  ]);
+  const models: LoadedModel[] = [unmerged!, late!, early!];
+  models.forEach((m, i) => (m.root.parent = parents[i]!));
+  // Merge while already under a rotated, scaled parent (the case the toon pass saw scramble).
+  late!.meshes = mergeSkinnedParts(late!.root, late!.meshes, config.id);
+  const pose = () => {
+    for (const m of models) {
+      const g = m.animator.groups.get(clip) as AnimationGroup | undefined;
+      if (!g) throw new Error(`mergeCheck: no clip ${clip}`);
+      g.start(false, 1, g.from, g.to);
+      g.goToFrame(frame);
+      g.pause();
+    }
+  };
+  pose();
+  const measure = () => models.map((m) => skinnedWorldBounds(m.root, m.meshes));
+  const first = measure();
+  for (const p of parents) p.rotation.set(...rotation2);
+  const second = measure();
+  const result: MergeCheckResult = {
+    unmerged: [first[0]!, second[0]!],
+    mergedUnderParent: [first[1]!, second[1]!],
+    mergedByLoadModel: [first[2]!, second[2]!],
+    meshCounts: {
+      unmerged: unmerged!.meshes.filter((m) => m.isEnabled()).length,
+      mergedUnderParent: late!.meshes.filter((m) => m.isEnabled()).length,
+      mergedByLoadModel: early!.meshes.filter((m) => m.isEnabled()).length,
+    },
+  };
+  if (keep) {
+    // Side by side, facing the camera (south), for close-up screenshots.
+    parents.forEach((p, i) => {
+      p.rotation.set(0, Math.PI, 0);
+      p.position.set((i - 1) * 4 * K, 0, 30);
+    });
+  } else {
+    for (const m of models) m.dispose();
+    for (const p of parents) p.dispose();
+  }
+  return result;
+}
 
 // ---- Frame loop ----------------------------------------------------------------
 let readyAt = -1;

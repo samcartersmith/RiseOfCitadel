@@ -2,6 +2,7 @@ import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
 import { loadModel, type LoadedModel } from './loadModel';
 import { MODEL_CONFIGS, type ModelId, type ModelViewConfig } from './modelConfig';
+import { unitModelSpec, type UnitModelId } from './modelRegistry';
 import { LOOPING_STATES, type LogicalState } from './states';
 import {
   DEFAULT_SMOOTHING,
@@ -51,7 +52,7 @@ const DEFAULT_RING_RADIUS = 0.75;
  */
 export class UnitView {
   readonly id: UnitId;
-  readonly modelId: ModelId;
+  readonly modelId: UnitModelId;
   readonly config: ModelViewConfig;
   /** Our wrapper node: position + facing live here, the glTF root hangs under it. */
   readonly node: TransformNode;
@@ -85,7 +86,10 @@ export class UnitView {
   constructor(scene: Scene, state: UnitViewState, options: UnitViewOptions = {}) {
     this.id = state.id;
     this.modelId = state.modelId;
-    this.config = MODEL_CONFIGS[state.modelId];
+    const spec = unitModelSpec(state.modelId);
+    const base = MODEL_CONFIGS[state.modelId as ModelId] as ModelViewConfig | undefined;
+    if (!spec && !base) throw new Error(`[citadel] unknown unit model "${state.modelId}"`);
+    this.config = spec?.config ?? base!;
     this.smoothing = options.smoothing ?? DEFAULT_SMOOTHING;
     this.turnRate = options.turnRate ?? 14;
     this.displayScale = options.displayScale ?? 1;
@@ -103,10 +107,9 @@ export class UnitView {
     this.applyTransform();
     this.node.setEnabled(false); // shown once the model is in
 
-    this.ready = loadModel(scene, this.config, {
-      mergeMeshes: options.mergeMeshes ?? true,
-      initialState: null,
-    }).then((model) => {
+    const loadOptions = { mergeMeshes: options.mergeMeshes ?? true, initialState: null };
+    const load = spec ? spec.load(scene, loadOptions) : loadModel(scene, this.config, loadOptions);
+    this.ready = load.then((model) => {
       if (this.disposed) {
         model.dispose();
         return;
@@ -117,7 +120,7 @@ export class UnitView {
         m.isPickable = false; // picking is screen-space in the manager
         m.metadata = { unitId: this.id };
       }
-      this.look = createUnitLook(model.meshes, scene);
+      this.look = spec?.look ? spec.look(model.meshes, scene) : createUnitLook(model.meshes, scene);
       this.appliedAnim = null;
       this.appliedVisible = null;
       this.appliedTeam = null;
@@ -133,6 +136,11 @@ export class UnitView {
   /** The animator, once loaded (debug/tests). */
   get animator() {
     return this.model?.animator ?? null;
+  }
+
+  /** The meshes being rendered, once loaded (debug/tests). */
+  get meshes() {
+    return this.model?.meshes ?? [];
   }
 
   /** World height of the bar anchor above the unit's feet. */

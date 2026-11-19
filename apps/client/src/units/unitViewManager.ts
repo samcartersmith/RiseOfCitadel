@@ -4,7 +4,7 @@ import { BarRenderer, type BarEntry } from './bars';
 import { RingRenderer, type RingEntry } from './rings';
 import { UnitView, type UnitViewOptions } from './unitView';
 import { diffStates, pickNearest, type ScreenTarget } from './diff';
-import type { ModelId } from './modelConfig';
+import type { UnitModelId } from './modelRegistry';
 import type { Team, UnitId, UnitViewState } from './unitState';
 
 export interface UnitViewCounts {
@@ -41,7 +41,7 @@ export class UnitViewManager {
 
   /** Apply this frame's states. Anything not in `states` is disposed. */
   sync(states: readonly UnitViewState[], dt: number): void {
-    const live = new Map<UnitId, ModelId>();
+    const live = new Map<UnitId, UnitModelId>();
     for (const [id, v] of this.views) live.set(id, v.modelId);
     const diff = diffStates(live, states);
     if (

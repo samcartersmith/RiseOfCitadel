@@ -2,7 +2,7 @@
  * Pure helpers for UnitViewManager: diffing incoming states against live
  * views, and screen-space picking. No Babylon.
  */
-import type { ModelId } from './modelConfig';
+import type { UnitModelId } from './modelRegistry';
 import type { UnitId } from './unitState';
 
 export interface StateDiff {
@@ -21,8 +21,8 @@ export interface StateDiff {
  * in `states` are ignored after the first (the manager warns once).
  */
 export function diffStates(
-  live: ReadonlyMap<UnitId, ModelId>,
-  states: Iterable<{ id: UnitId; modelId: ModelId }>,
+  live: ReadonlyMap<UnitId, UnitModelId>,
+  states: Iterable<{ id: UnitId; modelId: UnitModelId }>,
 ): StateDiff {
   const diff: StateDiff = { added: [], replaced: [], removed: [], kept: [] };
   const seen = new Set<UnitId>();

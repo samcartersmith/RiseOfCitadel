@@ -13,7 +13,7 @@ import type { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Observer } from '@babylonjs/core/Misc/observable';
 import type { Scene } from '@babylonjs/core/scene';
 import { loadModel, type LoadedModel, type LoadModelOptions } from '../../units/loadModel';
-import { mergeCharacter } from './merge';
+import { mergeSkinnedParts } from '../../units/mergeModel';
 import type { UnitLook } from '../../units/look';
 import type { Team } from '../../units/unitState';
 import { BONE_SCALES, BULWARK_VIEW_CONFIG, inheritedScale } from './config';
@@ -106,7 +106,7 @@ export async function loadBulwark(
   for (const m of meshes) if (m.isEnabled()) m.material = material;
   // Parts are authored with glTF winding (counter-clockwise, right-handed), like the body.
   for (const p of parts) p.sideOrientation = side;
-  if (merge) meshes = mergeCharacter(root, meshes, 'bulwark');
+  if (merge) meshes = mergeSkinnedParts(root, meshes, 'bulwark');
 
   const look = useLook ? createBulwarkLook(meshes, scene) : null;
   const setTeam = (t: Team) => look?.setTeam(t);

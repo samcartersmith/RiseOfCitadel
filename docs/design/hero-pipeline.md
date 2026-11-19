@@ -57,6 +57,18 @@ Current clip mapping:
 4. `pnpm test` runs `tools/assets/modelConfig.test.ts`, which fails if the config, the manifest and the committed GLB disagree.
 5. Check it in the sandbox: `pnpm dev`, then open `/anim.html`.
 
+A hero whose model is built in code (a kit-bash on a base body, like Bulwark) doesn't add a `ModelId`. It registers a custom unit model with its own loader and look (`registerUnitModel`, see [units.md §9](units.md#9-custom-unit-models)).
+
+### Team-colour mask authoring
+
+Team colour (art direction §2.2: ≥ 20% of a hero's visible surface, an accent on creeps) comes from the toon shader's **UV-swatch mask**, not from a mask texture or mesh names. The convention is in [toon-shader.md → Team-colour mask](toon-shader.md#team-colour-mask-atlas-uv-rectangles). In short:
+
+- **Atlases are 8 × 4 grids of gradient swatches**, and every face samples exactly one swatch. The mask is a list of swatch rectangles in UV space (`render/shaders/teamMask.ts → TEAM_MASKS`). Texels inside any rectangle take the team colour, scaled by the swatch's own light-to-dark gradient.
+- **Authoring a base model:** find which swatch each team part samples (the `/toon.html` hook's `setTeamMask` helps), add those (column, row) rectangles to `TEAM_MASKS`, and check renders from the default camera for the ≥ 20% target.
+- **Kit-bashed parts** (code-built or new meshes): put every team-coloured face on a **dedicated team swatch** and nothing else on it, so one rectangle tints exactly those faces. Bulwark does this with his generated atlas (`heroes/bulwark/palette.ts → BULWARK_TEAM_MASK`). Don't share a team swatch with skin, metal or other non-team faces.
+- **The mask survives merging** (UVs are kept, mesh names aren't), and it's a uniform, so it costs no extra materials or draw calls.
+- If a model can't be authored this way (team parts share swatches with non-team parts), ship a mask texture instead and note it in the hero's doc.
+
 ### Prop hiding
 
 KayKit characters ship with every weapon attached. A config's `props.show` lists the meshes the view uses. `props.hide` lists spares still in the GLB that start disabled (kept for kit-bashing). Props the hero will never use are removed from the GLB by the pipeline (`removeNodes`), so they cost nothing to download. Babylon names a multi-primitive mesh `<name>_primitive<n>`, and `applyPropVisibility` matches both forms.

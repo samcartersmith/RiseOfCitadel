@@ -51,6 +51,7 @@ test('unit views: 50 units inside budget, bars, selection, damage', async ({ pag
   await units(page, (u) => {
     u.reviveAll();
     u.pause(true);
+    u.hover(null); // whatever sits under the parked pointer must not add a hover ring
   });
   await frames(page, 2);
   const ids = await units(page, (u) => u.ids());
@@ -147,5 +148,56 @@ test('unit views: 100 units (measured, budget not asserted)', async ({ page }, t
     contentType: 'application/json',
   });
   await shot(page, testInfo, 'units-100-default');
+  expect(errors).toEqual([]);
+});
+
+test('unit views: registered custom model (Bulwark) gets a bar, a ring and its look', async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(180_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/units.html?engine=webgl&n=32');
+  await page.waitForFunction(() => window.__citadelReady === true, null, { timeout: 120_000 });
+  const vp = page.viewportSize()!;
+  await page.mouse.move(vp.width / 2, vp.height / 2);
+  await units(page, (u) => {
+    u.reviveAll();
+    u.pause(true);
+  });
+  const ids = await units(page, (u) => u.ids().filter((id) => u.state(id)!.modelId === 'bulwark'));
+  expect(ids.length).toBeGreaterThan(0);
+  const id = ids[0]!;
+  await page.evaluate((x) => window.__citadelUnits!.select(x), id);
+  await page.waitForFunction((x) => window.__citadelUnits!.rings(x).includes('selected'), id, {
+    timeout: 60_000,
+  });
+  const bar = await page.evaluate((x) => window.__citadelUnits!.bar(x), id);
+  expect(bar).not.toBeNull();
+  expect(bar!.mana).toBeGreaterThanOrEqual(0); // hero bar with a mana row
+  // UnitView used Bulwark's own loader (merged to one mesh) and look (toon material).
+  const meshes = await page.evaluate((x) => window.__citadelUnits!.unitMeshes(x), id);
+  console.log(`[units] bulwark meshes ${JSON.stringify(meshes)}`);
+  expect(meshes).toHaveLength(1);
+  expect(meshes[0]!.name).toBe('bulwark-merged-0');
+  expect(meshes[0]!.toon).toBe(true);
+  // Base models get the toon look installed at startup too.
+  const knight = await units(page, (u) => u.ids().find((i) => u.state(i)!.modelId === 'knight')!);
+  const knightMeshes = await page.evaluate((x) => window.__citadelUnits!.unitMeshes(x), knight);
+  expect(knightMeshes.every((m) => m.toon)).toBe(true);
+
+  await page.evaluate((x) => {
+    const s = window.__citadelUnits!.state(x)!;
+    window.__citadelCamera!.focusOn(s.position, { instant: true });
+  }, id);
+  for (let i = 0; i < 10; i++) await page.mouse.wheel(0, -300);
+  await page.waitForFunction(() => {
+    const c = window.__citadelCamera!.getState();
+    return Math.abs(c.distance - c.minDistance) < 0.5;
+  });
+  await frames(page, 3);
+  const path = testInfo.outputPath('units-bulwark-selected.png');
+  await page.screenshot({ path, timeout: 60_000 });
+  await testInfo.attach('units-bulwark-selected', { path, contentType: 'image/png' });
   expect(errors).toEqual([]);
 });

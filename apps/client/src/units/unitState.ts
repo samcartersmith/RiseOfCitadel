@@ -5,7 +5,7 @@
  * and in M3 the netcode interpolates them, so they must stay cheap to copy,
  * compare and serialise.
  */
-import type { ModelId } from './modelConfig';
+import type { UnitModelId } from './modelRegistry';
 import type { LogicalState } from './states';
 
 export type Team = 'wardens' | 'hollow' | 'neutral';
@@ -16,7 +16,8 @@ export type UnitId = number;
 
 export interface UnitViewState {
   id: UnitId;
-  modelId: ModelId;
+  /** A base model (modelConfig.ts) or one registered with `registerUnitModel`. */
+  modelId: UnitModelId;
   team: Team;
   /** Ground position (world units). y comes from the terrain, not the state. */
   position: { x: number; z: number };
