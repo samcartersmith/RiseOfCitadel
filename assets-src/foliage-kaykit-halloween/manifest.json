@@ -1,0 +1,17 @@
+{
+  "id": "foliage-kaykit-halloween",
+  "name": "KayKit Halloween Bits 1.0 (trees)",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Halloween-Bits-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_halloween_bits/Assets/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Halloween-Bits-1.0", "ref": "main" }],
+  "models": [
+    { "src": "addons/kaykit_halloween_bits/Assets/gltf/tree_pine_yellow_large.gltf", "out": "pine_tall" },
+    { "src": "addons/kaykit_halloween_bits/Assets/gltf/tree_dead_large.gltf", "out": "dead_large" },
+    { "src": "addons/kaykit_halloween_bits/Assets/gltf/tree_dead_medium.gltf", "out": "dead_medium" }
+  ],
+  "usedFor": "Map foliage: tall pines on both sides and dead trees in the Hollow biome, recoloured per biome at load"
+}

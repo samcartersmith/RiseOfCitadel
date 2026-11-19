@@ -1,0 +1,16 @@
+{
+  "id": "foliage-kaykit-hexagon",
+  "name": "KayKit Medieval Hexagon Pack 1.0 (trees)",
+  "author": "Kay Lousberg",
+  "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0",
+  "license": "CC0-1.0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseFile": "addons/kaykit_medieval_hexagon_pack/LICENSE.txt",
+  "licenseMustContain": "Creative Commons Zero",
+  "downloads": [{ "type": "github-zip", "repo": "KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0", "ref": "main" }],
+  "models": [
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/nature/tree_single_A.gltf", "out": "tree_cone" },
+    { "src": "addons/kaykit_medieval_hexagon_pack/Assets/gltf/decoration/nature/tree_single_B.gltf", "out": "tree_round" }
+  ],
+  "usedFor": "Map foliage: the round broadleaf and cone trees in both biomes, recoloured per biome at load"
+}
