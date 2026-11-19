@@ -16,6 +16,7 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import type { Scene } from '@babylonjs/core/scene';
 import type { Nullable } from '@babylonjs/core/types';
 import { findSunLight } from '../../render/shadows';
+import { getSceneLightTint } from '../../render/lighting/sceneTint';
 import { DEFAULT_TOON_PARAMS, rampUniforms } from '../../render/shaders/toonParams';
 import { DETAIL_TILE, SPLAT_LAYERS, hexToRgb, rampUniformName } from './splatPalette';
 import {
@@ -178,8 +179,22 @@ export class TerrainSplatPlugin extends MaterialPluginBase {
     const hemiDir = hemi ? tmp.copyFrom(hemi.direction).normalize() : UP;
     const sky = linear(p.ambientSky);
     const ground = linear(p.ambientGround);
-    ubo.updateFloat4('terrainSky', sky.r * k, sky.g * k, sky.b * k, 0);
-    ubo.updateFloat4('terrainGround', ground.r * k, ground.g * k, ground.b * k, 0);
+    // Time-of-day tints from the lighting rig (identity without one): uniforms only.
+    const tint = getSceneLightTint(scene);
+    ubo.updateFloat4(
+      'terrainSky',
+      sky.r * k * tint.sky[0],
+      sky.g * k * tint.sky[1],
+      sky.b * k * tint.sky[2],
+      0,
+    );
+    ubo.updateFloat4(
+      'terrainGround',
+      ground.r * k * tint.ground[0],
+      ground.g * k * tint.ground[1],
+      ground.b * k * tint.ground[2],
+      0,
+    );
     ubo.updateFloat4('terrainHemiDir', hemiDir.x, hemiDir.y, hemiDir.z, 0);
 
     const r = this.ramps;

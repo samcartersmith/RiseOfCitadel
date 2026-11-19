@@ -6,6 +6,25 @@ import type { Scene } from '@babylonjs/core/scene';
 import type { TierSettings } from './quality';
 
 /**
+ * Called after the base grade is applied, with the tier's grade intensity. The
+ * lighting rig (render/lighting) registers one so its time-of-day exposure,
+ * contrast and curves survive tier switches and pipeline rebuilds.
+ */
+export type ColorGradeHook = (intensity: number) => void;
+const gradeHooks = new WeakMap<Scene, ColorGradeHook>();
+const gradeIntensities = new WeakMap<Scene, number>();
+
+/** Registers (or with null, clears) the scene's colour-grade hook and runs it once. */
+export function setColorGradeHook(scene: Scene, hook: ColorGradeHook | null): void {
+  if (!hook) {
+    gradeHooks.delete(scene);
+    return;
+  }
+  gradeHooks.set(scene, hook);
+  hook(gradeIntensities.get(scene) ?? 1);
+}
+
+/**
  * Colour grade toward the art-direction palette (docs/design/art-direction.md §2.1):
  * warm gold highlights (Warden hearth-light), a faint violet lift in the shadows
  * (Hollow), and a saturation/contrast boost so ACES doesn't wash the palette out.
@@ -39,6 +58,9 @@ export function applyColorGrade(scene: Scene, intensity: number): void {
   ip.vignetteStretch = 0.4;
   ip.vignetteCameraFov = 0.6;
   ip.vignetteColor = new Color4(0.07, 0.04, 0.1, 0); // violet-black, not grey
+
+  gradeIntensities.set(scene, intensity);
+  gradeHooks.get(scene)?.(intensity);
 }
 
 /**

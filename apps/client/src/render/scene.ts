@@ -1,12 +1,10 @@
 import { Scene } from '@babylonjs/core/scene';
-import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
-import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import type { AbstractEngine } from '@babylonjs/core/Engines/abstractEngine';
 import { createMobaCamera } from '../camera/mobaCamera';
+import { createLightingRig, PHASES } from './lighting';
 
 /** Palette from docs/design/art-direction.md §2.1. */
 export const Palette = {
@@ -36,9 +34,9 @@ export function createBootScene(engine: AbstractEngine): Scene {
   // MOBA camera (M1-03): fixed yaw, ~55° pitch, edge/drag pan, zoom, bounds.
   createMobaCamera(scene);
 
-  new HemisphericLight('sky', new Vector3(0, 1, 0), scene).intensity = 0.6;
-  const sun = new DirectionalLight('sun', new Vector3(-0.5, -1, 0.4), scene);
-  sun.intensity = 0.9;
+  // Day/night rig (M1-09): owns the `sun` and hemispheric lights, fog, sky and the colour
+  // grade's time-of-day terms. Starts at noon; `window.__citadelLighting.setT(t)` scrubs it.
+  createLightingRig(scene, { t: PHASES.noon });
 
   const ground = MeshBuilder.CreateGround('ground', { width: 64, height: 64 }, scene);
   ground.material = flat(scene, 'm-ground', Palette.wardenMoss);
