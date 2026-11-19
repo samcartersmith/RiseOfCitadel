@@ -19,6 +19,7 @@ export default defineConfig({
         structures: fileURLToPath(new URL('./structures.html', import.meta.url)),
         creeps: fileURLToPath(new URL('./creeps.html', import.meta.url)),
         terrain: fileURLToPath(new URL('./terrain.html', import.meta.url)),
+        water: fileURLToPath(new URL('./water.html', import.meta.url)),
       },
       output: {
         // Keep Babylon in its own long-cached chunk.

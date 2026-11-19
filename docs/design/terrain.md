@@ -69,7 +69,7 @@ The **mesh** is a 641 × 641 grid (25 map units = 0.78 world units per vertex), 
 
 Layers paint over each other in that order. Each blend "bites" through where the layer's own detail is bright, which gives jagged, hand-painted edges rather than soft photo cross-fades.
 
-**River.** Water is M1-06. Until then a flat translucent ribbon (river light, alpha 0.5, one draw call) sits over the riverbed, so the river reads in screenshots. Pass `riverPlaceholder: false` to drop it.
+**River.** The water is M1-06 ([water.md](water.md)). Without it, a flat translucent ribbon (river light, alpha 0.5, one draw call) sits over the riverbed so the river reads in screenshots. Pass `riverPlaceholder: false` when you create the water.
 
 ## Textures and download
 
