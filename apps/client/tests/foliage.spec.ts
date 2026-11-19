@@ -24,6 +24,17 @@ async function freshStats(page: Page) {
   return page.evaluate(() => window.__citadelStats!);
 }
 
+/** Fresh stats once draw calls and triangles stop changing (lazy loads/LOD settle first). */
+async function settledStats(page: Page) {
+  let prev = await freshStats(page);
+  for (let i = 0; i < 8; i++) {
+    const next = await freshStats(page);
+    if (next.drawCalls === prev.drawCalls && next.triangles === prev.triangles) return next;
+    prev = next;
+  }
+  return prev;
+}
+
 async function shot(page: Page, testInfo: TestInfo, name: string) {
   const path = testInfo.outputPath(`${name}.png`);
   await page.screenshot({ path, timeout: 60_000 });
@@ -110,7 +121,7 @@ test('foliage: setTreeVisible hides and shows trees without extra draw calls', a
   await page.goto('/foliage.html?engine=webgl&tier=low&hud=0&view=jungle');
   await waitReady(page);
 
-  const before = await freshStats(page);
+  const before = await settledStats(page);
   expect(await page.evaluate(() => window.__citadelFoliage!.hiddenCount())).toBe(0);
 
   const ids = await page.evaluate(() => window.__citadelFoliage!.chop(40));
@@ -126,7 +137,7 @@ test('foliage: setTreeVisible hides and shows trees without extra draw calls', a
   expect(state.hidden).toBe(40);
   expect(state.visible.every((v) => !v)).toBe(true);
 
-  const after = await freshStats(page);
+  const after = await settledStats(page);
   console.log(
     `[foliage] chop 40: draws ${before.drawCalls} -> ${after.drawCalls}, tris ${before.triangles} -> ${after.triangles}`,
   );
@@ -140,7 +151,7 @@ test('foliage: setTreeVisible hides and shows trees without extra draw calls', a
   expect(await page.evaluate(() => window.__citadelFoliage!.hiddenCount())).toBe(40);
   await page.evaluate(() => window.__citadelFoliage!.regrow());
   expect(await page.evaluate(() => window.__citadelFoliage!.hiddenCount())).toBe(0);
-  const regrown = await freshStats(page);
+  const regrown = await settledStats(page);
   expect(regrown.drawCalls).toBe(before.drawCalls);
   expect(regrown.triangles).toBe(before.triangles);
 
