@@ -21,6 +21,7 @@ export default defineConfig({
         terrain: fileURLToPath(new URL('./terrain.html', import.meta.url)),
         water: fileURLToPath(new URL('./water.html', import.meta.url)),
         lighting: fileURLToPath(new URL('./lighting.html', import.meta.url)),
+        foliage: fileURLToPath(new URL('./foliage.html', import.meta.url)),
       },
       output: {
         // Keep Babylon in its own long-cached chunk.
