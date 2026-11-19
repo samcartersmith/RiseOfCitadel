@@ -25,6 +25,7 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import type { Scene } from '@babylonjs/core/scene';
 import type { Nullable } from '@babylonjs/core/types';
 import { findSunLight } from '../shadows';
+import { getSceneLightTint } from '../lighting/sceneTint';
 import { buildPaletteLut, CITADEL_RAMP_STOPS, PALETTE_LUT_SIZE, type RampStop } from './palette';
 import { packTeamRects, type UvRect } from './teamMask';
 import { DEFAULT_TOON_PARAMS, rampUniforms, type ToonParams } from './toonParams';
@@ -185,24 +186,32 @@ export class CitadelToonPlugin extends MaterialPluginBase {
     const hemiDir = hemi ? tmpDir.copyFrom(hemi.direction).normalize() : UP;
     const sky = this.color('sky', p.ambientSky);
     const ground = this.color('ground', p.ambientGround);
+    // Time-of-day tints from the lighting rig (identity without one): uniforms only.
+    const tint = getSceneLightTint(scene);
     ubo.updateFloat4(
       'toonSky',
-      sky.r * hemiIntensity,
-      sky.g * hemiIntensity,
-      sky.b * hemiIntensity,
+      sky.r * hemiIntensity * tint.sky[0],
+      sky.g * hemiIntensity * tint.sky[1],
+      sky.b * hemiIntensity * tint.sky[2],
       0,
     );
     ubo.updateFloat4(
       'toonGround',
-      ground.r * hemiIntensity,
-      ground.g * hemiIntensity,
-      ground.b * hemiIntensity,
+      ground.r * hemiIntensity * tint.ground[0],
+      ground.g * hemiIntensity * tint.ground[1],
+      ground.b * hemiIntensity * tint.ground[2],
       0,
     );
     ubo.updateFloat4('toonHemiDir', hemiDir.x, hemiDir.y, hemiDir.z, 0);
 
     const rim = this.color('rim', p.rimColor);
-    ubo.updateFloat4('toonRimColor', rim.r, rim.g, rim.b, p.rimIntensity);
+    ubo.updateFloat4(
+      'toonRimColor',
+      rim.r * tint.rim[0],
+      rim.g * tint.rim[1],
+      rim.b * tint.rim[2],
+      p.rimIntensity * tint.rimIntensity,
+    );
     ubo.updateFloat4(
       'toonHeight',
       p.heightBase,
