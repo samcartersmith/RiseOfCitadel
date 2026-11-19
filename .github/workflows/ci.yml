@@ -30,9 +30,16 @@ jobs:
       - name: Build client
         run: pnpm --filter @citadel/client build
 
-  browser:
+  e2e:
+    name: browser (${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
     needs: checks
+    strategy:
+      fail-fast: false
+      matrix:
+        # Software-GL rendering is slow and must run one worker per machine, so spread the
+        # spec files over parallel machines instead.
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,15 +50,24 @@ jobs:
       - name: Install Chromium
         run: pnpm --filter @citadel/client exec playwright install --with-deps chromium
       - name: Smoke test + screenshots
-        run: pnpm test:e2e
+        run: pnpm --filter @citadel/client exec playwright test --shard=${{ matrix.shard }}/4
         env:
           CI: 'true'
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
+          name: screenshots-${{ matrix.shard }}
           path: |
             apps/client/test-results/**/*.png
             apps/client/playwright-report/
           retention-days: 14
+
+  # One stable check name that is green only when every shard passed.
+  browser:
+    runs-on: ubuntu-latest
+    needs: e2e
+    if: always()
+    steps:
+      - name: All browser shards passed
+        run: test "${{ needs.e2e.result }}" = success
