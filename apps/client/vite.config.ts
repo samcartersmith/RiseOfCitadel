@@ -17,6 +17,7 @@ export default defineConfig({
         toon: fileURLToPath(new URL('./toon.html', import.meta.url)),
         bulwark: fileURLToPath(new URL('./bulwark.html', import.meta.url)),
         structures: fileURLToPath(new URL('./structures.html', import.meta.url)),
+        creeps: fileURLToPath(new URL('./creeps.html', import.meta.url)),
       },
       output: {
         // Keep Babylon in its own long-cached chunk.

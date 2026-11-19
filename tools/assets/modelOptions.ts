@@ -22,6 +22,14 @@ export interface ModelOptions {
    * positions/weights ever break a model's skinning.
    */
   quantize?: boolean;
+  /**
+   * Decimate every mesh with meshoptimizer (gltf-transform `simplify`), run after
+   * weld and before quantize. `ratio` is the target fraction of vertices to keep,
+   * `error` the max deviation as a fraction of the mesh radius (default 0.01).
+   * Skin joints/weights survive on the kept vertices. Used for the M1-14 creeps
+   * (docs/design/creeps.md); omit it to leave a model untouched.
+   */
+  simplify?: { ratio: number; error?: number };
 }
 
 /** Throws if any requested name is missing, so manifest typos fail the build loudly. */
