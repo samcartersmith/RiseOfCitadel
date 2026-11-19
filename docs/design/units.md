@@ -16,15 +16,18 @@ Code: `apps/client/src/units/`
 | `rings.ts` | All selection/hover rings in one thin-instanced draw call. |
 | `look.ts` | The `UnitLook` seam for team rim + highlight outline, with a fallback until the toon shader lands. |
 | `mergeModel.ts` | Folds a KayKit character's parts into 1–2 skinned meshes (the draw-call fix, §4). |
+| `skinRemap.ts` | Pure skin-unification math used by the merge (bone remap + bind-pose rebake). Tested in `skinRemap.test.ts`. |
+| `skinBounds.ts` | CPU-skinned world bounds of a model, for the merge regression test. |
+| `modelRegistry.ts` | `registerUnitModel`: custom unit models with their own loader and look (§9). |
 
-Sandbox: `/units.html` (`apps/client/src/sandbox/units.ts`). Test: `apps/client/tests/units.spec.ts`.
+Sandbox: `/units.html` (`apps/client/src/sandbox/units.ts`). Tests: `apps/client/tests/units.spec.ts`, `apps/client/tests/unitMerge.spec.ts`.
 
 ## 1. The state contract
 
 ```ts
 interface UnitViewState {
   id: number;                 // sim entity id, stable for the unit's lifetime
-  modelId: ModelId;           // 'knight' | 'rogue_hooded' | 'mage' | 'skeleton_minion' (more in M1-14/M2-16)
+  modelId: UnitModelId;       // a base ModelId ('knight' | 'rogue_hooded' | 'mage' | 'skeleton_minion') or a registered id ('bulwark'), §9
   team: 'wardens' | 'hollow' | 'neutral';
   position: { x: number; z: number }; // ground position; y comes from terrain later
   facing: number;             // radians; 0 faces +z (north), +π/2 faces +x (east)
@@ -94,10 +97,13 @@ A KayKit character is about 6 skinned body parts plus rigid props (sword, shield
 
 `loadModel(..., { mergeMeshes: true })` (used by `UnitView`; off by default, so `loadModel`'s existing behaviour is unchanged) calls `mergeSkinnedParts`:
 
-- Every visible part using the same material is folded into **one skinned mesh**. All skins in these GLBs share the same 41 joints, so skinned parts keep their bone indices and weights.
+- Every visible part using the same material is folded into **one skinned mesh** on the first skinned part's skeleton.
+- **Skins are unified first** (`unifySkins` → `skinRemap.ts`). Each body part in our GLBs has its **own glTF skin**, so Babylon gives it its own `Skeleton` (same joint nodes, but its own joint order and its own inverse bind matrices). `pnpm assets:build` quantizes each mesh, and gltf-transform folds that mesh's dequantization transform `D` into its skin: `IBM_part[j] = D · IBM_ref[j']`. Merging the raw parts onto one skeleton put every other part in the wrong space; up close, the Knight's body rendered mirrored behind its head. Now each part's joint indices are remapped onto the reference skeleton **by joint node** (`j → j'`), and its positions/normals are rebaked through `D` (checked to be one constant matrix over every joint the part uses), so it skins identically. If a part can't be unified, the merge is skipped and the model renders unmerged. No source geometry is modified (clones share geometry with the cached container).
 - Rigid props are re-expressed in bind space and skinned 100% to the bone their attachment node hangs from. They still follow the hand/head exactly.
 - Hidden spare props are left alone (still disabled, still available for kit-bashing).
-- If a model breaks the assumptions (different joint counts, more than 4 influences), the merge is skipped and the model renders unmerged.
+- If a model breaks the assumptions (skins that differ by more than a constant matrix, a joint missing from the reference skin, more than 4 influences), the merge is skipped and the model renders unmerged.
+- The merged mesh keeps the glTF winding (`sideOrientation` of the source parts). It works at any pose and under any parent transform, including a rotated and scaled one.
+- **Regression tests:** `skinRemap.test.ts` (Vitest) checks that a rebaked part skins vertex-for-vertex identically on the reference skeleton with permuted joints and a quantization transform, in random poses. `tests/unitMerge.spec.ts` (Playwright) loads three Knights in the same pose: unmerged, merged under a rotated and scaled parent, and merged by `loadModel` then parented. It checks that their CPU-skinned world bounding boxes, centroids and vertex counts match within 0.02 world units, under two parent rotations. Before the fix they were off by 0.5.
 
 Result: **1 draw call per hero model**, **2 per skeleton_minion** (body + its separate glowing-eye material). Animation is unaffected, because animation groups drive the bone transform nodes, not the meshes. Each unit still has its own skeleton, since every unit animates independently.
 
@@ -119,18 +125,23 @@ setUnitLookFactory(factory) // swap the implementation for units created afterwa
 - **Team rim:** a shared `StandardMaterial` per (source material, team) on the same albedo texture. It adds a faint faction tint plus an emissive fresnel rim (Wardens gold `#E8B54A`, Hollow violet `#8E5BD9`, neutrals a dim grey). It's added on top of the lit colour (`useEmissiveAsIllumination`), so it reads even on the dark skeleton texture. Shared materials mean no extra draw calls and no per-unit shader variants.
 - **Highlight:** Babylon's outline renderer, on selected/hovered units only: relation colour for selection, pale for hover. It costs one extra draw call per outlined mesh, so a handful per frame.
 
-**When M1-02's toon material lands**, it should provide its own `UnitLookFactory` that sets the toon material's team rim and outline parameters, then call `setUnitLookFactory` once at startup. `UnitView` doesn't change. The fallback's materials are only created when the fallback is used.
+**Toon look (M1-02).** `installToonUnitLook()` (`render/shaders/toonUnitLook.ts`) swaps in the toon material's factory (team colour through the atlas mask, see toon-shader.md). It only affects views created **after** the call, so call it once at startup, **before the first `UnitViewManager.sync`**:
+
+- **Game:** in the game's scene setup (the `main.ts` boot scene today, the M2-12 sim-bridge setup later), right after the scene is created, next to `registerBulwarkUnitModel()` and the other hero registrations (§9).
+- **Units sandbox:** `sandbox/units.ts` calls it at startup. `?look=fallback` keeps the fallback rim below, `?look=0` turns looks off.
+
+A model registered with its own `look` (§9) uses that instead of the global factory. The fallback's materials are only created when the fallback is used.
 
 The ground rings (`rings.ts`) aren't part of the look. They're always drawn: selection is a relation-tinted ring at `selectionRadius` (from the model config), hover is a faint pale ring (slightly larger if the unit is also selected).
 
 ## 6. Sandbox and debug hook
 
-`/units.html?n=50` (0–100, also on a slider). `?engine=webgl` forces WebGL2. `?merge=0` turns merging off. `?scale=1` shows true config scale (the default is 2.5, see §7). `?look=0` disables the team rim/outline.
+`/units.html?n=50` (0–100, also on a slider). `?engine=webgl` forces WebGL2. `?merge=0` turns merging off. `?scale=1` shows true config scale (the default is 2.5, see §7). The toon look is installed at startup; `?look=fallback` uses the fallback rim, `?look=0` disables looks. The hero rotation is knight, rogue_hooded, mage and **Bulwark** (a registered custom model, §9), so 50 units include two Bulwarks.
 
 A fake driver stands in for the sim. It owns plain states and mutates them: units wander their half of the lane, close on nearby enemies, attack (with `animSeq` per swing), heroes sometimes cast and spend mana, units die (death anim), then respawn with `snap`. It's seeded, so screenshots repeat.
 
 - Click selects, shift-click toggles, hovering highlights. Camera: the M1-03 MOBA camera.
-- `window.__citadelUnits`: `count`, `setCount`, `ids`, `counts`, `state`, `select`, `hover`, `damage`, `reviveAll`, `pause`, `bar(id)` (what was actually uploaded to the bar buffer), `rings(id)`, `screenPos`, `pick`, `frames`.
+- `window.__citadelUnits`: `count`, `setCount`, `ids`, `counts`, `state`, `select`, `hover`, `damage`, `reviveAll`, `pause`, `bar(id)` (what was actually uploaded to the bar buffer), `rings(id)`, `screenPos`, `pick`, `frames`, `unitMeshes(id)` (rendered meshes and whether they use the toon material) and `mergeCheck(opts)` (the merge regression check, §4).
 - `window.__citadelReady` is set 30 frames after every model has loaded. `window.__citadelStats` is published every 15 frames.
 
 ## 7. Measured budget and open items
@@ -139,8 +150,8 @@ Measured in the Playwright run (headless Chromium, SwiftShader WebGL2, 1280×720
 
 | Units | Draw calls | Triangles | Within budget (≤ 150 / ≤ 300k) |
 |---|---|---|---|
-| 50 (9 heroes, 37 lane creeps, 4 neutrals) | **94** | **262k** | yes |
-| 100 | **185** | **523k** | **no** |
+| 50 (9 heroes incl. 2 Bulwarks, 37 lane creeps, 4 neutrals; toon look) | **94** | **265k** | yes |
+| 100 | **190** | **537k** | **no** |
 | 50, merging off | 474 | 273k | no |
 
 What's left:
@@ -166,3 +177,22 @@ scene.render();
 - Selection lives in input/bridge state, not in the sim. Write `selected`/`hovered` into the states each frame, and use `views.pick(x, y)` for clicks and hover.
 - `views.get(id)?.animator?.onEvent(...)` is still available for view-only effects (a swing's whoosh, VFX at the attack point). Gameplay timing (when damage lands) comes from the sim.
 - The sim runs at 30 Hz and renders at display rate. Either hand the manager the latest snapshot and let smoothing hide the steps, or interpolate between the last two snapshots in the bridge and turn smoothing off.
+
+## 9. Custom unit models
+
+Most units are a base GLB plus a `ModelViewConfig` (`modelConfig.ts`), loaded with `loadModel`. Kit-bashed heroes build their model in code and bring their own look, so `modelRegistry.ts` lets a hero module register itself:
+
+```ts
+registerUnitModel('bulwark', {
+  config: BULWARK_VIEW_CONFIG,              // scale, barAnchorHeight, selectionRadius
+  load: (scene, { mergeMeshes, initialState }) =>
+    loadBulwark(scene, { merge: mergeMeshes, look: false, initialState }),
+  look: createBulwarkLook,                  // optional; overrides the global UnitLook factory
+});
+```
+
+- `UnitViewState.modelId` is a `UnitModelId`: a base `ModelId` or any registered id. `UnitView` checks the registry first, then `MODEL_CONFIGS`, and throws for an unknown id.
+- `load` returns a `LoadedModel` (root, meshes, animator, dispose). UnitView parents its root under the unit's node, drives the animator and disposes it with the view, exactly like a base model.
+- `look` is optional. Without it, the global factory (`setUnitLookFactory` / `installToonUnitLook`) is used.
+- units/ never imports heroes/. The hero registers itself: `heroes/bulwark/unitModel.ts → registerBulwarkUnitModel()`. Call it once at startup, before any view with that id is created (the units sandbox does).
+- Ids must be unique. Registering an existing id replaces it, so registration is idempotent.

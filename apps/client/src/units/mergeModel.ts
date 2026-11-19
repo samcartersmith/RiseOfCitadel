@@ -5,27 +5,35 @@ import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import type { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Bone } from '@babylonjs/core/Bones/bone';
+import type { Skeleton } from '@babylonjs/core/Bones/skeleton';
 import type { Node } from '@babylonjs/core/node';
+import { rebakeSkinnedPart, type RebakedStreams, type SkinDesc } from './skinRemap';
 
 /**
  * Draw-call reduction for KayKit-style characters (docs/design/units.md §4).
  *
  * A KayKit character is ~6 skinned body parts plus rigid props (sword,
  * shield, hat, cape) parented to attachment bones: ~10 draw calls per unit,
- * so 50 units would be ~500. All parts share one material and one joint list,
- * so we fold every *visible* part into one skinned mesh per material:
+ * so 50 units would be ~500. All parts share one material and one set of
+ * joint nodes, so we fold every *visible* part into one skinned mesh per
+ * material, on the first skinned part's skeleton:
  *
- * - Skinned parts keep their bone indices/weights (every skin in these GLBs
- *   has the same 41 joints in the same order).
+ * - Skinned parts are first unified onto that skeleton (`unifySkins`). Each
+ *   part has its own glTF skin (own Babylon Skeleton, own joint order, own
+ *   inverse bind matrices with the part's dequantization folded in), so its
+ *   vertices are rebaked into the reference bind space and its joint indices
+ *   remapped by joint node. Merging parts without this mirrored the Knight's
+ *   body behind its head.
  * - Rigid props are re-expressed in bind space and skinned 100% to the bone
  *   their attachment node hangs off, so they still follow the hand/head.
  *
  * The result is 1 draw call per hero model and 2 for skeleton_minion (body +
  * glowing eyes). Animation groups keep working because they animate the bone
  * transform nodes, not the meshes. Hidden spare props are left untouched.
+ * Works at any pose and under any parent transform (rotated, scaled).
  *
  * Returns the meshes to render, or the input unchanged when the model doesn't
- * fit the assumptions (different joint lists, >4 influences, no skin).
+ * fit the assumptions (skins that can't be unified, >4 influences, no skin).
  */
 export function mergeSkinnedParts(
   root: TransformNode,
@@ -42,7 +50,8 @@ export function mergeSkinnedParts(
   if (visible.some((m) => m.isVerticesDataPresent(VertexBuffer.MatricesIndicesExtraKind))) {
     return [...meshes];
   }
-  if (skinned.some((m) => m.skeleton!.bones.length !== skeleton.bones.length)) return [...meshes];
+  const unified = unifySkins(skinned, skeleton);
+  if (!unified) return [...meshes];
 
   // Bring every world matrix and bone matrix up to date for the current (rest) pose.
   root.computeWorldMatrix(true);
@@ -89,8 +98,9 @@ export function mergeSkinnedParts(
     const mW: number[] = [];
     let ok = true;
     for (const m of group) {
-      const pos = m.getVerticesData(VertexBuffer.PositionKind);
-      const nrm = m.getVerticesData(VertexBuffer.NormalKind);
+      const rebaked = unified.get(m);
+      const pos = rebaked?.positions ?? m.getVerticesData(VertexBuffer.PositionKind);
+      const nrm = rebaked ? rebaked.normals : m.getVerticesData(VertexBuffer.NormalKind);
       const uv = m.getVerticesData(VertexBuffer.UVKind);
       const idx = m.getIndices();
       if (!pos || !idx) {
@@ -130,7 +140,7 @@ export function mergeSkinnedParts(
         else uvs.push(0, 0);
       }
       if (m.skeleton) {
-        const mi = m.getVerticesData(VertexBuffer.MatricesIndicesKind);
+        const mi = rebaked?.matricesIndices ?? m.getVerticesData(VertexBuffer.MatricesIndicesKind);
         const mw = m.getVerticesData(VertexBuffer.MatricesWeightsKind);
         if (!mi || !mw || mi.length !== count * 4 || mw.length !== count * 4) {
           ok = false;
@@ -167,6 +177,8 @@ export function mergeSkinnedParts(
     else merged.rotation.copyFrom(ref.rotation);
     merged.scaling.copyFrom(ref.scaling);
     merged.material = group[0]!.material;
+    // Keep the glTF winding (a new Mesh defaults to the opposite, which flips lighting).
+    merged.sideOrientation = ref.sideOrientation;
     merged.skeleton = skeleton;
     merged.numBoneInfluencers = 4;
     out.push(merged);
@@ -175,6 +187,71 @@ export function mergeSkinnedParts(
   for (const m of consumed) m.dispose(true, false);
   const kept = meshes.filter((m) => !consumed.includes(m as Mesh));
   return [...out, ...kept];
+}
+
+/** A Babylon skeleton as a pure SkinDesc: joint keys (bone node ids) and IBMs by joint index. */
+function skinDesc(sk: Skeleton): SkinDesc {
+  const indexOf = (b: Bone) => {
+    const i = b.getIndex();
+    return i >= 0 ? i : sk.bones.indexOf(b);
+  };
+  let n = 0;
+  for (const b of sk.bones) n = Math.max(n, indexOf(b) + 1);
+  const keys: (string | number | undefined)[] = new Array<undefined>(n).fill(undefined);
+  const ibm = new Float32Array(n * 16);
+  for (const b of sk.bones) {
+    const i = indexOf(b);
+    const tn = b.getTransformNode();
+    keys[i] = tn ? tn.uniqueId : `bone:${b.name}`;
+    ibm.set(b.getAbsoluteInverseBindMatrix().m, i * 16);
+  }
+  return { keys, ibm };
+}
+
+/**
+ * Plan how every skinned part lands on `skeleton` (docs/design/units.md §4).
+ * Parts already on it map to null (use their streams as they are); parts on
+ * another skeleton get rebaked streams (positions/normals in `skeleton`'s bind
+ * space, joint indices remapped by joint node). Returns null, touching
+ * nothing, if any part can't be unified. Pure with respect to the meshes: no
+ * geometry is modified (clones share geometry with the cached container).
+ */
+export function unifySkins(
+  skinned: readonly Mesh[],
+  skeleton: Skeleton,
+): Map<Mesh, RebakedStreams | null> | null {
+  const out = new Map<Mesh, RebakedStreams | null>();
+  const descs = new Map<Skeleton, SkinDesc>();
+  const descOf = (sk: Skeleton) => {
+    let d = descs.get(sk);
+    if (!d) descs.set(sk, (d = skinDesc(sk)));
+    return d;
+  };
+  for (const m of skinned) {
+    const sk = m.skeleton;
+    if (!sk) return null;
+    if (sk === skeleton) {
+      out.set(m, null);
+      continue;
+    }
+    const positions = m.getVerticesData(VertexBuffer.PositionKind);
+    const matricesIndices = m.getVerticesData(VertexBuffer.MatricesIndicesKind);
+    const matricesWeights = m.getVerticesData(VertexBuffer.MatricesWeightsKind);
+    if (!positions || !matricesIndices || !matricesWeights) return null;
+    const rebaked = rebakeSkinnedPart(
+      {
+        positions,
+        normals: m.getVerticesData(VertexBuffer.NormalKind),
+        matricesIndices,
+        matricesWeights,
+      },
+      descOf(sk),
+      descOf(skeleton),
+    );
+    if (!rebaked) return null;
+    out.set(m, rebaked);
+  }
+  return out;
 }
 
 function matricesClose(a: Matrix, b: Matrix, eps = 1e-4): boolean {

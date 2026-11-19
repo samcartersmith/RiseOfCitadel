@@ -26,7 +26,7 @@ import { MODEL_CONFIGS } from '../units/modelConfig';
 import { loadModel, type LoadedModel } from '../units/loadModel';
 import type { Team } from '../units/unitState';
 import { loadBulwark, type BulwarkModel } from '../heroes/bulwark/bulwark';
-import { mergeCharacter } from '../heroes/bulwark/merge';
+import { mergeSkinnedParts } from '../units/mergeModel';
 import { BULWARK_TEAM_MASK } from '../heroes/bulwark/material';
 import { applyCitadelToon } from '../render/shaders/applyCitadelToon';
 import { inTeamMask, teamMaskFor, type UvRect } from '../render/shaders/teamMask';
@@ -135,7 +135,7 @@ const [bulwark, knight] = await Promise.all([
 ]);
 // The stock knight goes through the same merge fix-ups (heroes/bulwark/merge.ts) for a fair comparison.
 if (params.get('merge') !== '0')
-  knight.meshes = mergeCharacter(knight.root, knight.meshes, 'knight');
+  knight.meshes = mergeSkinnedParts(knight.root, knight.meshes, 'knight');
 const knightToon = (t: Team) =>
   applyCitadelToon(knight.root, {
     team: t === 'neutral' ? null : t === 'wardens' ? 'warden' : 'hollow',

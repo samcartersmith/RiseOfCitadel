@@ -94,7 +94,7 @@ The e2e test checks the draw call two ways: per instance (`renderStats`) and sce
 
 `mergeSkinnedParts` (M1-13) assumes every skinned part of a character shares one skeleton. In our GLBs they don't. `pnpm assets:build` quantizes each mesh, and gltf-transform folds each mesh's dequantization into that mesh's own skin (its inverse bind matrices). Babylon loads one `Skeleton` per skin, so merging onto the first part's skeleton put the other parts in the wrong space. Up close the merged Knight rendered with its body mirrored behind the head (cape in front, face floating). It's invisible at unit-sandbox zoom, but it's there for **every** merged unit.
 
-`heroes/bulwark/merge.ts → unifySkins` re-expresses each part in the first part's bind space, using one constant matrix per part (`IBM_part · IBM_ref⁻¹`, checked to be the same for every joint). It then points the part at the shared skeleton and copies the glTF winding onto the merged mesh. `mergeCharacter` wraps `mergeSkinnedParts` with that. The sandbox uses it for the stock Knight too. **This should move into `units/mergeModel.ts`**; this PR may not edit that module.
+This used to live here as `heroes/bulwark/merge.ts → unifySkins`. M1-13b moved and generalised it into `units/mergeModel.ts` (`unifySkins` + `skinRemap.ts`: bone remap by joint node plus a bind-pose rebake), so `mergeSkinnedParts` is now exact for every unit, and Bulwark calls it directly. See units.md §4.
 
 ## 7. Known gaps
 
@@ -102,5 +102,5 @@ The e2e test checks the draw call two ways: per instance (`renderStats`) and sce
 - **The silhouette is a "walking wall" block** next to the Knight's slim figure plus sword. It's distinct at the MOBA zoom, but at ~60 px the arch top and the chains merge into a rounded block.
 - **The brazier doesn't glow yet.** The ember cell is bright in the albedo only. The ult glow is a VFX job (M1-12 library) or an emissive mask later.
 - **Left arm clipping:** in some poses the left hand passes through the back of the shield.
-- **UnitView integration:** needs a units/ change so a config can supply `loadBulwark` and `createBulwarkLook`.
+- **UnitView integration:** done in M1-13b. `heroes/bulwark/unitModel.ts → registerBulwarkUnitModel()` registers `modelId: 'bulwark'` (units.md §9).
 - **The pauldron stones are small** and read mostly from above.
